@@ -1,27 +1,23 @@
-# Next.js Hybrid Starter
 
-[Azure Static Web Apps](https://docs.microsoft.com/azure/static-web-apps/overview) allows you to easily deploy [Next.js](https://nextjs.org/) apps in minutes. Use this repo with the [Azure Static Web Apps Hybrid Next.js tutorial](https://learn.microsoft.com/en-us/azure/static-web-apps/deploy-nextjs-hybrid) to build and customize a new Next.js site.
+# Create Toolpad App
 
-## Running locally
+This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-toolpad-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
-To run locally, start by installing the Node dependencies. 
+## Setup
 
-```bash
-npm install
-```
+Run `npx auth secret` to generate a secret and replace the value in the .env.local file with it.
 
-Start the development server with the following command:
+Add the CLIENT_ID and CLIENT_SECRET from your OAuth provider to the .env.local file.
 
-```bash
-npm run dev
-```
+## Getting Started
 
-Next, open [http://localhost:3000](http://localhost:3000) in your browser to see the result.
+First, run the development server: `npm run dev`
 
-For richer local development experience, refer to [Set up local development for Azure Static Web Apps](https://docs.microsoft.com/azure/static-web-apps/local-development).
+Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-## How it works
 
-This starter application uses Next.js and React Server Components. By default, all Next.js components are React Server Components, and as such, are handled by Azure Static Web Apps-managed backend functions. Read more about [Next.js support for Azure Static Web Apps](https://learn.microsoft.com/en-us/azure/static-web-apps/nextjs). 
+## Deploy on Vercel
 
-> **Note:** If you use the [Azure Static Web Apps CLI](https://docs.microsoft.com/azure/static-web-apps/local-development), copy the *staticwebapp.config.json* file to the *out* folder, and start the CLI from the *out* folder.
+The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+
+Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
