@@ -3,6 +3,7 @@ import { AppProvider } from '@toolpad/core/nextjs';
 import { AppRouterCacheProvider } from '@mui/material-nextjs/v14-appRouter';
 import DashboardIcon from '@mui/icons-material/Dashboard';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
+import BusinessIcon from '@mui/icons-material/Business';
 import type { Navigation } from '@toolpad/core/AppProvider';
 
 import theme from '../theme';
@@ -21,6 +22,11 @@ const NAVIGATION: Navigation = [
     segment: 'orders',
     title: 'Orders',
     icon: <ShoppingCartIcon />,
+  },
+  {
+    segment: 'organizations',
+    title: 'Organizations',
+    icon: <BusinessIcon />,
   },
 ];
 
