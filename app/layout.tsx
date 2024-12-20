@@ -7,6 +7,7 @@ import BusinessIcon from '@mui/icons-material/Business';
 import type { Navigation } from '@toolpad/core/AppProvider';
 
 import theme from '../theme';
+import {DashboardLayout} from "@toolpad/core/DashboardLayout";
 
 const NAVIGATION: Navigation = [
   {
@@ -25,6 +26,7 @@ const NAVIGATION: Navigation = [
   },
   {
     segment: 'organizations',
+    pattern: 'organizations{/:id}*',
     title: 'Organizations',
     icon: <BusinessIcon />,
   },
@@ -48,7 +50,10 @@ export default function RootLayout(props: { children: React.ReactNode }) {
               branding={BRANDING}
               theme={theme}
             >
-              {props.children}
+              <DashboardLayout >
+
+                {props.children}
+              </DashboardLayout>
             </AppProvider>
           </AppRouterCacheProvider>
         
