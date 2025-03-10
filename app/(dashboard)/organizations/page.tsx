@@ -61,7 +61,7 @@ export default function Organization() {
     const [error, setError] = useState<string | null>(null);
     const [loading, setLoading] = useState(true)
     useEffect(() => {
-        getOrganizations(pageNumber, rowsPerPage).then((res) => {
+        getOrganizationsMock(pageNumber, rowsPerPage).then((res) => {
             return res.json()
         })
         .then((data) => {
