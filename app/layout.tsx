@@ -6,9 +6,6 @@ import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import BusinessIcon from '@mui/icons-material/Business';
 import type { Navigation } from '@toolpad/core/AppProvider';
 
-// import theme from '../theme';
-import {DashboardLayout} from "@toolpad/core/DashboardLayout";
-
 const NAVIGATION: Navigation = [
   {
     kind: 'header',
@@ -50,10 +47,7 @@ export default function RootLayout(props: { children: React.ReactNode }) {
               branding={BRANDING}
               // theme={theme}
             >
-              <DashboardLayout >
-
                 {props.children}
-              </DashboardLayout>
             </AppProvider>
           </AppRouterCacheProvider>
         

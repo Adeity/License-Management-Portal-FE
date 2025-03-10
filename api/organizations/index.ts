@@ -7,7 +7,7 @@ export const getOrganizations = async (pageNumber: number = 1, pageSize: number 
     // return fetch(API_ROOT_URL + `/organizations/${authData.resellerId}`)
 }
 
-export const getOrganizationsMock = (): Promise<any> => {
+export const getOrganizationsMock = (a, b): Promise<any> => {
     return new Promise ((resolve) => {
             const mockData = `[
             {
