@@ -6,7 +6,7 @@ import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import BusinessIcon from '@mui/icons-material/Business';
 import type { Navigation } from '@toolpad/core/AppProvider';
 
-import theme from '../theme';
+// import theme from '../theme';
 import {DashboardLayout} from "@toolpad/core/DashboardLayout";
 
 const NAVIGATION: Navigation = [
@@ -48,7 +48,7 @@ export default function RootLayout(props: { children: React.ReactNode }) {
             <AppProvider
               navigation={NAVIGATION}
               branding={BRANDING}
-              theme={theme}
+              // theme={theme}
             >
               <DashboardLayout >
 

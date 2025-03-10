@@ -58,18 +58,27 @@ export default function Organization() {
     const [pageNumber, setPageNumber] = useState<number>(1);
     const [rowsPerPage, setRowsPerPage] = useState<number>(5);
     const [data, setData] = useState<PaginatedResponse<Organization> | null>(null)
+    const [error, setError] = useState<string | null>(null);
+    const [loading, setLoading] = useState(true)
     useEffect(() => {
         getOrganizations(pageNumber, rowsPerPage).then((res) => {
             return res.json()
         })
         .then((data) => {
             setData(data);
+            setLoading(false)
+        })
+        .catch((error) => {
+            setError(error.message);
+            setLoading(false)
         })
     }, [pageNumber, rowsPerPage]);
 
     return (
         <>
-          {data &&
+          {loading && <Typography>Loading...</Typography>}
+          {error && <Typography>Error: {error}</Typography>}
+          {!error && data &&
             <div>
                 <EnhancedTable paginatedData={data}
                                headCells={tableHeadCells}
