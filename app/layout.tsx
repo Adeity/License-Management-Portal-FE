@@ -6,12 +6,26 @@ import DashboardIcon from '@mui/icons-material/Dashboard';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import BusinessIcon from '@mui/icons-material/Business';
 import type {Navigation} from '@toolpad/core/AppProvider';
-import {Authentication} from "@toolpad/core";
+import {Authentication, NavigationItem} from "@toolpad/core";
 import {logout} from "@/api/login";
 import {SessionProvider, useCustomSession} from "@/context/SessionContext";
 import {useRouter} from "next/navigation";
 
-const NAVIGATION: Navigation = [
+// New attribute to add
+interface ExtendedAttribute {
+  roles?: string[];
+}
+// Extended NavigationItem type
+type ExtendedNavigationItem = NavigationItem & ExtendedAttribute;
+
+// Redefine Navigation to use ExtendedNavigationItem
+type ExtendedNavigation = ExtendedNavigationItem[];
+
+interface RoleNavigation extends Navigation {
+    roles?: string[];
+}
+
+const NAVIGATION: ExtendedNavigation = [
   {
     kind: 'header',
     title: 'Main items',
@@ -20,17 +34,27 @@ const NAVIGATION: Navigation = [
     segment: '',
     title: 'Dashboard',
     icon: <DashboardIcon />,
+    roles: ['Admin']
   },
   {
-    segment: 'orders',
-    title: 'Orders',
+    segment: 'customerOrganizations',
+    title: 'Customer Organizations',
     icon: <ShoppingCartIcon />,
+    roles: ['Admin', 'Reseller']
   },
   {
     segment: 'organizations',
     pattern: 'organizations{/:id}*',
     title: 'Organizations',
     icon: <BusinessIcon />,
+    roles: ['Admin']
+  },
+  {
+    segment: 'customer',
+    pattern: 'customer{/:id}*',
+    title: 'Customer',
+    icon: <BusinessIcon />,
+    roles: ['Admin', 'Reseller', 'Customer']
   },
 ];
 
@@ -71,9 +95,16 @@ export function MyAppProvider (props: { children: React.ReactNode }) {
     },
   }
 
+  const NAVIGATION_BASED_ON_USER_ROLE = NAVIGATION.filter((item) => {
+    if (item.roles && customSession?.user?.role) {
+      return item.roles.includes(customSession?.user?.role as string)
+    }
+    return false;
+  })
+
   return (
       <AppProvider
-          navigation={NAVIGATION}
+          navigation={NAVIGATION_BASED_ON_USER_ROLE}
           branding={BRANDING}
           authentication={authentication}
           session={customSession}
