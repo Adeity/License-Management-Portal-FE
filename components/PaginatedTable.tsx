@@ -170,11 +170,11 @@ export default function EnhancedTable(props: EnhancedTableProps) {
   };
 
   const handleChangePage = (event: unknown, newPage: number) => {
-    setPageNumber(newPage + 1)
+    setPageNumber(newPage)
   };
 
   const handleChangeRowsPerPage = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setPageNumber(1);
+    setPageNumber(0);
     setRowsPerPage(parseInt(event.target.value, 10));
   };
 

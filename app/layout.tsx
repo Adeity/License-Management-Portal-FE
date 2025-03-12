@@ -10,6 +10,10 @@ import {Authentication, NavigationItem} from "@toolpad/core";
 import {logout} from "@/api/login";
 import {SessionProvider, useCustomSession} from "@/context/SessionContext";
 import {useRouter} from "next/navigation";
+import {PageContainer} from "@toolpad/core/PageContainer";
+import { Crud, DataModel, DataSource, DataSourceCache } from '@toolpad/core/Crud';
+import {DashboardLayout} from "@toolpad/core/DashboardLayout";
+import {Organization, organizationsDataSource} from "@/datasource/organizations/organizations";
 
 // New attribute to add
 interface ExtendedAttribute {
@@ -37,7 +41,7 @@ const NAVIGATION: ExtendedNavigation = [
     roles: ['Admin']
   },
   {
-    segment: 'organizationList',
+    segment: 'organizations',
     title: 'Organization list',
     icon: <DashboardIcon />,
     roles: ['Admin']
@@ -48,6 +52,20 @@ const NAVIGATION: ExtendedNavigation = [
     icon: <DashboardIcon />,
     roles: ['Admin']
   },
+  // {
+  //   segment: 'notes',
+  //   title: 'Notes',
+  //   icon: <DashboardIcon />,
+  //   pattern: 'notes{/:noteId}*',
+  //   roles: ['Admin', 'Reseller', 'Customer']
+  // },
+  // {
+  //   segment: 'organizations',
+  //   title: 'Organizations',
+  //   icon: <DashboardIcon />,
+  //   pattern: 'organizations{/:organizationId}*',
+  //   roles: ['Admin', 'Reseller', 'Customer']
+  // },
   // {
   //   segment: 'customerOrganizations',
   //   title: 'Customer Organizations',
@@ -121,7 +139,19 @@ export function MyAppProvider (props: { children: React.ReactNode }) {
           authentication={authentication}
           session={customSession}
       >
-        {props.children}
+        <DashboardLayout defaultSidebarCollapsed>
+          <PageContainer>
+            {/* preview-start */}
+            {props.children}
+            <Crud<Organization>
+                dataSource={organizationsDataSource}
+                dataSourceCache={null}
+                rootPath="/organizations"
+                initialPageSize={10}
+            />
+            {/* preview-end */}
+          </PageContainer>
+        </DashboardLayout>
       </AppProvider>
       )
 }
