@@ -1,5 +1,5 @@
 import {API_ROOT_URL} from "@/utils/constants";
-import {LocalStorage} from '@/utils/localStorage'
+import {DataModelId} from "@toolpad/core";
 
 export const getOrganizationByReseller = async (pageNumber: number = 1, pageSize: number = 10) => {
     return await fetch(API_ROOT_URL + `/api/organizations/3?pageNumber=${pageNumber}&pageSize=${pageSize}`,
@@ -18,6 +18,27 @@ export const getAllOrganizations = async (pageNumber: number = 1, pageSize: numb
         headers: {
             'Content-Type': 'application/json',
         },
+        credentials: "include"
+    })
+}
+
+export const getOrganizationById = async (id: DataModelId) => {
+    return await fetch(API_ROOT_URL + `/api/organizations/${id}`, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        credentials: "include"
+    })
+}
+
+export const createOrganization = async (data: any) => {
+    return await fetch(API_ROOT_URL + `/api/organizations`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
         credentials: "include"
     })
 }
