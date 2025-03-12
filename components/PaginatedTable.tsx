@@ -23,14 +23,6 @@ import {HeadCell} from '@/types/HeadCell';
 import {PaginatedResponse} from "@/types/PaginatedResponse";
 import {useRouter} from "next/navigation";
 
-interface Data {
-  id: number;
-  calories: number;
-  carbs: number;
-  fat: number;
-  name: string;
-  protein: number;
-}
 
 function descendingComparator<T>(a: T, b: T, orderBy: keyof T) {
   if (b[orderBy] < a[orderBy]) {
@@ -44,17 +36,6 @@ function descendingComparator<T>(a: T, b: T, orderBy: keyof T) {
 
 type Order = 'asc' | 'desc';
 
-function getComparator<Key extends keyof any>(
-    order: Order,
-    orderBy: Key,
-): (
-    a: { [key in Key]: number | string },
-    b: { [key in Key]: number | string },
-) => number {
-  return order === 'desc'
-      ? (a, b) => descendingComparator(a, b, orderBy)
-      : (a, b) => -descendingComparator(a, b, orderBy);
-}
 interface EnhancedTableHeadProps {
   numSelected: number;
   onSelectAllClick: (event: React.ChangeEvent<HTMLInputElement>) => void;
@@ -134,19 +115,19 @@ function EnhancedTableToolbar(props: EnhancedTableToolbarProps) {
               {title}
             </Typography>
         )}
-        {numSelected > 0 ? (
-            <Tooltip title="Delete">
-              <IconButton>
-                <DeleteIcon />
-              </IconButton>
-            </Tooltip>
-        ) : (
-            <Tooltip title="Filter list">
-              <IconButton>
-                <FilterListIcon />
-              </IconButton>
-            </Tooltip>
-        )}
+        {/*{numSelected > 0 ? (*/}
+        {/*    <Tooltip title="Delete">*/}
+        {/*      <IconButton>*/}
+        {/*        <DeleteIcon />*/}
+        {/*      </IconButton>*/}
+        {/*    </Tooltip>*/}
+        {/*) : (*/}
+        {/*    <Tooltip title="Filter list">*/}
+        {/*      <IconButton>*/}
+        {/*        <FilterListIcon />*/}
+        {/*      </IconButton>*/}
+        {/*    </Tooltip>*/}
+        {/*)}*/}
       </Toolbar>
   );
 }
@@ -161,12 +142,18 @@ interface EnhancedTableProps {
 export default function EnhancedTable(props: EnhancedTableProps) {
   const router = useRouter();
   const {paginatedData, headCells, title, rowsPerPage, setPageNumber, setRowsPerPage} = props
-  const {totalItems, currentPage, nextPage, previousPage, totalPages, results: rows} = paginatedData
-  const page = currentPage - 1
+  const {totalItems, pageNumber, nextPage, previousPage, totalPages, items: rows} = paginatedData
+  const page = pageNumber - 1
   const [order, setOrder] = React.useState<Order>('asc');
   const [orderBy, setOrderBy] = React.useState<string>('name');
   const [selected, setSelected] = React.useState<readonly number[]>([]);
   const [dense, setDense] = React.useState(false);
+
+  console.log('total items:', totalItems)
+    console.log('current page:', pageNumber)
+    console.log('next page:', nextPage)
+    console.log('previous page:', previousPage)
+    console.log('total pages:', totalPages)
 
   const handleSelectAllClick = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.checked) {

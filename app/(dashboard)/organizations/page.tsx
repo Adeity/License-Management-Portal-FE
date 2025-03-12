@@ -4,9 +4,9 @@ import {useEffect, useState} from 'react';
 import Typography from '@mui/material/Typography';
 import {LocalStorage} from '@/utils/localStorage'
 import {API_ROOT_URL} from "@/utils/constants";
-import {getOrganizations, getOrganizationsMock} from '@/api/organizations';
+import {getOrganizationByReseller, getOrganizationsMock} from '@/api/organizations';
 import {PaginatedResponse} from "@/types/PaginatedResponse";
-import EnhancedTable from "@/components/MyAwesomeTable";
+import EnhancedTable from "@/components/PaginatedTable";
 import {HeadCell} from "@/types/HeadCell";
 
 const tableHeadCells: readonly HeadCell[] = [

@@ -1,7 +1,7 @@
-import { getOrganizations, getOrganizationsMock } from "./organizations";
+import { getOrganizationByReseller, getOrganizationsMock } from "./organizations";
 
 const mock = true;
-let getOrganizationsFn = getOrganizations;
+let getOrganizationsFn = getOrganizationByReseller;
 
 if (mock) {
     getOrganizationsFn = getOrganizationsMock

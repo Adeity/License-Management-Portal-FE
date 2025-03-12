@@ -37,25 +37,37 @@ const NAVIGATION: ExtendedNavigation = [
     roles: ['Admin']
   },
   {
-    segment: 'customerOrganizations',
-    title: 'Customer Organizations',
-    icon: <ShoppingCartIcon />,
-    roles: ['Admin', 'Reseller']
-  },
-  {
-    segment: 'organizations',
-    pattern: 'organizations{/:id}*',
-    title: 'Organizations',
-    icon: <BusinessIcon />,
+    segment: 'organizationList',
+    title: 'Organization list',
+    icon: <DashboardIcon />,
     roles: ['Admin']
   },
   {
-    segment: 'customer',
-    pattern: 'customer{/:id}*',
-    title: 'Customer',
-    icon: <BusinessIcon />,
-    roles: ['Admin', 'Reseller', 'Customer']
+    segment: 'createOrganization',
+    title: 'Create Organization',
+    icon: <DashboardIcon />,
+    roles: ['Admin']
   },
+  // {
+  //   segment: 'customerOrganizations',
+  //   title: 'Customer Organizations',
+  //   icon: <ShoppingCartIcon />,
+  //   roles: ['Admin', 'Reseller']
+  // },
+  // {
+  //   segment: 'organizations',
+  //   pattern: 'organizations{/:id}*',
+  //   title: 'Organizations',
+  //   icon: <BusinessIcon />,
+  //   roles: ['Admin']
+  // },
+  // {
+  //   segment: 'customer',
+  //   pattern: 'customer{/:id}*',
+  //   title: 'Customer',
+  //   icon: <BusinessIcon />,
+  //   roles: ['Admin', 'Reseller', 'Customer']
+  // },
 ];
 
 const BRANDING = {

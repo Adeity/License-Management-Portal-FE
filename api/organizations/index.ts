@@ -1,10 +1,25 @@
 import {API_ROOT_URL} from "@/utils/constants";
 import {LocalStorage} from '@/utils/localStorage'
 
-export const getOrganizations = async (pageNumber: number = 1, pageSize: number = 10) => {
-    let authData = LocalStorage.readAuthData();
-    return await fetch(API_ROOT_URL + `/api/organizations/3?pageNumber=${pageNumber}&pageSize=${pageSize}`)
-    // return fetch(API_ROOT_URL + `/organizations/${authData.resellerId}`)
+export const getOrganizationByReseller = async (pageNumber: number = 1, pageSize: number = 10) => {
+    return await fetch(API_ROOT_URL + `/api/organizations/3?pageNumber=${pageNumber}&pageSize=${pageSize}`,
+        {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            credentials: "include"
+        })
+}
+
+export const getAllOrganizations = async (pageNumber: number = 1, pageSize: number = 10) => {
+    return await fetch(API_ROOT_URL + `/api/organizations?pageNumber=${pageNumber}&pageSize=${pageSize}`, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        credentials: "include"
+    })
 }
 
 export const getOrganizationsMock = (a, b): Promise<any> => {
