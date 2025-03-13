@@ -1,20 +1,22 @@
 "use client"
 import * as React from 'react';
-import {useEffect, useState} from 'react';
 import Typography from '@mui/material/Typography';
-import {LocalStorage} from '@/utils/localStorage'
-import {API_ROOT_URL} from "@/utils/constants";
-import {getOrganizationByReseller, getOrganizationsMock} from '@/api/organizations';
-import {PaginatedResponse} from "@/types/PaginatedResponse";
+import {getAllOrganizations} from "@/api/organizations";
 import EnhancedTable from "@/components/PaginatedTable";
+import {PaginatedResponse} from "@/types/PaginatedResponse";
 import {HeadCell} from "@/types/HeadCell";
+import {useEffect, useState} from "react";
+import {Button} from "@mui/material";
+import {router} from "next/client";
+import {useRouter} from "next/navigation";
+
 
 const tableHeadCells: readonly HeadCell[] = [
     {
-        id: 'email',
-        numeric: false,
+        id: 'id',
+        numeric: true,
         disablePadding: false,
-        label: 'Email',
+        label: 'Id',
     },
     {
         id: 'name',
@@ -23,72 +25,54 @@ const tableHeadCells: readonly HeadCell[] = [
         label: 'Name',
     },
     {
-        id: 'organization',
+        id: 'organizationType',
         numeric: false,
         disablePadding: false,
-        label: 'Organization',
-    },
-    {
-        id: 'id',
-        numeric: true,
-        disablePadding: false,
-        label: 'Id',
-    },
-    {
-        id: 'phoneNumber',
-        numeric: false,
-        disablePadding: false,
-        label: 'Phone number',
-    },
-    {
-        id: 'role',
-        numeric: false,
-        disablePadding: false,
-        label: 'Role',
-    },
-    {
-        id: 'status',
-        numeric: false,
-        disablePadding: false,
-        label: 'Status',
+        label: 'Type',
     },
 ];
 
-export default function Organization() {
-    const [pageNumber, setPageNumber] = useState<number>(1);
-    const [rowsPerPage, setRowsPerPage] = useState<number>(5);
-    const [data, setData] = useState<PaginatedResponse<Organization> | null>(null)
-    const [error, setError] = useState<string | null>(null);
-    const [loading, setLoading] = useState(true)
-    useEffect(() => {
-        getOrganizationsMock(pageNumber, rowsPerPage).then((res) => {
-            return res.json()
-        })
-        .then((data) => {
-            setData(data);
-            setLoading(false)
-        })
-        .catch((error) => {
-            setError(error.message);
-            setLoading(false)
-        })
-    }, [pageNumber, rowsPerPage]);
-
-    return (
-        <>
-          {loading && <Typography>Loading...</Typography>}
-          {error && <Typography>Error: {error}</Typography>}
-          {!error && data &&
-            <div>
-                <EnhancedTable paginatedData={data}
-                               headCells={tableHeadCells}
-                               title={"Organizations"}
-                               rowsPerPage={rowsPerPage}
-                               setPageNumber={setPageNumber}
-                               setRowsPerPage={setRowsPerPage}
-                />
-            </div>
-          }
-        </>
-  );
+export default function OrganizationList() {
+    return (null)
+    // const [pageNumber, setPageNumber] = useState<number>(0);
+    // const [rowsPerPage, setRowsPerPage] = useState<number>(2);
+    // const [data, setData] = useState<PaginatedResponse<Organization> | null>(null)
+    // const [error, setError] = useState<string | null>(null);
+    // const [loading, setLoading] = useState(true)
+    // const router = useRouter();
+    // useEffect(() => {
+    //     getAllOrganizations(pageNumber, rowsPerPage).then((res) => {
+    //         return res.json()
+    //     })
+    //         .then((data) => {
+    //             setData(data);
+    //             setLoading(false)
+    //         })
+    //         .catch((error) => {
+    //             setError(error.message);
+    //             setLoading(false)
+    //         })
+    // }, [pageNumber, rowsPerPage]);
+    //
+    // console.log('pgae number:', pageNumber)
+    // console.log('rows per page:', rowsPerPage)
+    // return (
+    //     <>
+    //         {loading && <Typography>Loading...</Typography>}
+    //         {error && <Typography>Error: {error}</Typography>}
+    //         {!error && data &&
+    //             <div>
+    //                 <Button variant="contained" onClick={() => router.push("/organizations/create")}>Create</Button>
+    //
+    //                 <EnhancedTable paginatedData={data}
+    //                                headCells={tableHeadCells}
+    //                                title={"Organizations"}
+    //                                rowsPerPage={rowsPerPage}
+    //                                setPageNumber={setPageNumber}
+    //                                setRowsPerPage={setRowsPerPage}
+    //                 />
+    //             </div>
+    //         }
+    //     </>
+    // );
 }

@@ -43,6 +43,27 @@ export const createOrganization = async (data: any) => {
     })
 }
 
+export const updateOrganization = async (data: any) => {
+    return await fetch(API_ROOT_URL + `/api/organizations/${data.id}`, {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+        credentials: "include"
+    })
+}
+
+export const deleteOrganization = async (id: any) => {
+    return await fetch(API_ROOT_URL + `/api/organizations/${id}`, {
+        method: 'DELETE',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        credentials: "include"
+    })
+}
+
 export const getOrganizationsMock = (a, b): Promise<any> => {
     return new Promise ((resolve) => {
             const mockData = `[
