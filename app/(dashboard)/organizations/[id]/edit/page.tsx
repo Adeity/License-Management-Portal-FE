@@ -9,10 +9,13 @@ import getResellersHook from "@/hooks/getResellersHook";
 import {useState} from "react";
 import Box from "@mui/material/Box";
 import {createOrganization, updateOrganization} from "@/api/organizations";
+import {useActivePage} from "@toolpad/core";
+import {PageContainer} from "@toolpad/core/PageContainer";
 
 export default function HomePage() {
     const params = useParams()
     const router = useRouter();
+    const activePage = useActivePage();
     
     const {data, error, loading} = useOrganizationById(params.id)
     const {data: availableOrganizationTypes, loading: availableOrgTypesloading} = useAvailableOrganizationTypes()
@@ -112,9 +115,16 @@ export default function HomePage() {
             console.error('Organization creation failed')
         }
     }
-    
+
+    const pageTitle = `Edit: ${data.name}`
+    const breadcrumbTitle = `${params.id}`;
+    const path = `${activePage.path}/${params.id}`;
+    const editPath = `${activePage.path}/${params.id}/edit`;
+    const breadcrumbs = [...activePage.breadcrumbs,
+        {title: breadcrumbTitle, path},
+        {title: 'Edit', path: editPath}];
     return (
-        <>
+        <PageContainer breadcrumbs={breadcrumbs} title={pageTitle}>
             <TextField helperText =""
                        id="outlined-basic"
                        label="Id"
@@ -172,6 +182,6 @@ export default function HomePage() {
             <Box>
                 <Button onClick={onSubmit}>Submit Changes</Button>
             </Box>
-        </>
+        </PageContainer>
     )
 }

@@ -7,11 +7,9 @@ import {PaginatedResponse} from "@/types/PaginatedResponse";
 import {HeadCell} from "@/types/HeadCell";
 import {useEffect, useState} from "react";
 import {Button} from "@mui/material";
-import {router} from "next/client";
 import {useRouter} from "next/navigation";
 import ReplayIcon from '@mui/icons-material/Replay';
-import Box from "@mui/material/Box";
-import {DataGrid} from "@mui/x-data-grid";
+import {PageContainer} from "@toolpad/core/PageContainer";
 
 const tableHeadCells: readonly HeadCell[] = [
     {
@@ -84,23 +82,23 @@ export default function OrganizationList() {
     }
 
     return (
-        <>
-            {error && <Typography>Error: {error}</Typography>}
-            {!error && data &&
-                <div>
-                    <Button variant="text" onClick={handleRefetch}><ReplayIcon /></Button>
-                    <Button variant="contained" onClick={() => router.push("/organizations/create")}>Create</Button>
-                    {loading ? (<Typography>Loading...</Typography>) :
-                        <EnhancedTable paginatedData={data}
-                                       headCells={tableHeadCells}
-                                       title={"Organizations"}
-                                       rowsPerPage={rowsPerPage}
-                                       setPageNumber={setPageNumber}
-                                       setRowsPerPage={setRowsPerPage}
-                        />
-                    }
-                </div>
-            }
-        </>
+            <PageContainer >
+                {error && <Typography>Error: {error}</Typography>}
+                {!error && data &&
+                    <div>
+                        <Button variant="text" onClick={handleRefetch}><ReplayIcon /></Button>
+                        <Button variant="contained" onClick={() => router.push("/organizations/create")}>Create</Button>
+                        {loading ? (<Typography>Loading...</Typography>) :
+                            <EnhancedTable paginatedData={data}
+                                           headCells={tableHeadCells}
+                                           title={"Organizations"}
+                                           rowsPerPage={rowsPerPage}
+                                           setPageNumber={setPageNumber}
+                                           setRowsPerPage={setRowsPerPage}
+                            />
+                        }
+                    </div>
+                }
+            </PageContainer>
     );
 }

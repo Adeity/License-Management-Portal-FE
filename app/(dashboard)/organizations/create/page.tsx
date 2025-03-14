@@ -7,6 +7,8 @@ import {useState} from "react";
 import getResellersHook from "@/hooks/getResellersHook";
 import {createOrganization} from "@/api/organizations";
 import {useRouter} from "next/navigation";
+import {PageContainer} from "@toolpad/core/PageContainer";
+import {useActivePage} from "@toolpad/core";
 
 export default function CreatOrganizationPage() {
     const router = useRouter();
@@ -14,6 +16,7 @@ export default function CreatOrganizationPage() {
     const {data: resellers} = getResellersHook()
     const [orgType, setOrgType] = useState("Organization")
     const [orgTypeValidationError, setOrgTypeValidationError] = useState('')
+    const activePage = useActivePage();
 
     const [name, setName] = useState("")
     const [nameValidationError, setNameValidationError] = useState('')
@@ -82,8 +85,12 @@ export default function CreatOrganizationPage() {
         }
     }
 
+    const breadcrumbTitle = `Create`;
+    const path = `${activePage.path}/create`;
+    const breadcrumbs = [...activePage.breadcrumbs, {title: breadcrumbTitle, path}];
     return (
-        <div>
+        <PageContainer title={"Create New Organization"} breadcrumbs={breadcrumbs}>
+            
             <Box
                 component={"form"}
                 >
@@ -137,6 +144,6 @@ export default function CreatOrganizationPage() {
             <Box>
                 <Button onClick={onSubmit}>Create org</Button>
             </Box>
-        </div>
+    </PageContainer>
     )
 }

@@ -43,7 +43,7 @@ const NAVIGATION: ExtendedNavigation = [
   {
     segment: 'organizations',
     title: 'Organizations',
-    pattern: 'organizations{/:id}*',
+    pattern: 'organizations/:id*',
     icon: <DashboardIcon />,
     roles: ['Admin']
   },
@@ -54,12 +54,12 @@ const NAVIGATION: ExtendedNavigation = [
   //   icon: <DashboardIcon />,
   //   roles: ['Admin']
   // },
-  {
-    segment: 'createOrganization',
-    title: 'Create Organization',
-    icon: <DashboardIcon />,
-    roles: ['Admin']
-  },
+  // {
+  //   segment: 'createOrganization',
+  //   title: 'Create Organization',
+  //   icon: <DashboardIcon />,
+  //   roles: ['Admin']
+  // },
   // {
   //   segment: 'notes',
   //   title: 'Notes',
@@ -147,11 +147,7 @@ export function MyAppProvider (props: { children: React.ReactNode }) {
           authentication={authentication}
           session={customSession}
       >
-        {/*<DashboardLayout defaultSidebarCollapsed>*/}
-        {/*  <PageContainer>*/}
             {props.children}
-        {/*  </PageContainer>*/}
-        {/*</DashboardLayout>*/}
       </AppProvider>
       )
 }

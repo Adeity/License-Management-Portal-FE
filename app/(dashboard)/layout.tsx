@@ -1,6 +1,5 @@
 ﻿"use client"
 import * as React from 'react';
-import { PageContainer } from '@toolpad/core/PageContainer';
 import {useEffect} from "react";
 import {checkUserInfo} from "@/api/login";
 import { DashboardLayout, SidebarFooterProps } from '@toolpad/core/DashboardLayout';
@@ -35,7 +34,6 @@ export default function Layout(props: { children: React.ReactNode }) {
 
     return (
       <DashboardLayout>
-          <PageContainer>
               {loading ? (
                   <div style={{ display: 'flex', justifyContent: 'center', alignItems: '', height: '100vh' }}>
                       <CircularProgress  size={"5rem"}/>
@@ -43,7 +41,6 @@ export default function Layout(props: { children: React.ReactNode }) {
               ) : (
                   props.children
               )}
-          </PageContainer>
     </DashboardLayout>
     )
 }
