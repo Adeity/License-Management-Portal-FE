@@ -7,4 +7,5 @@
     phoneNumber: string;
     email: string;
     status: string;
+    parentOrganization: string;
 }

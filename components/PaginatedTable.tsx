@@ -149,12 +149,6 @@ export default function EnhancedTable(props: EnhancedTableProps) {
   const [selected, setSelected] = React.useState<readonly number[]>([]);
   const [dense, setDense] = React.useState(false);
 
-  console.log('total items:', totalItems)
-    console.log('current page:', pageNumber)
-    console.log('next page:', nextPage)
-    console.log('previous page:', previousPage)
-    console.log('total pages:', totalPages)
-
   const handleSelectAllClick = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.checked) {
       const newSelected = rows.map((n) => n.id);
@@ -215,11 +209,13 @@ export default function EnhancedTable(props: EnhancedTableProps) {
                           selected={isItemSelected}
                           sx={{ cursor: 'pointer' }}
                       >
-                        {headCells.map((headCell) => (
-                          <TableCell key={headCell.id} align={headCell.numeric ? 'right' : 'left'}>
-                            {row[headCell.id]}
-                          </TableCell>
-                        ))}
+                        {headCells.map((headCell) => {
+                            return (
+                                <TableCell key={headCell.id} align={headCell.numeric ? 'right' : 'left'}>
+                                  {row[headCell.id]}
+                                </TableCell>
+                            )
+                          })}
                       </TableRow>
                   );
                 })}

@@ -6,15 +6,18 @@ import {
     getOrganizationById,
     updateOrganization
 } from "@/api/organizations";
-import {GridSingleSelectColDef} from "@mui/x-data-grid";
-const orgTypeSelect: GridSingleSelectColDef = {field: 'organizationTypeId', headerName: 'Type', flex: 1, type: "singleSelect", valueOptions: [
+import {GridSingleSelectColDef, GridValueOptionsParams} from "@mui/x-data-grid";
+const orgTypeSelect: GridSingleSelectColDef = {
+    field: 'organizationTypeId', headerName: 'Type', flex: 1, type: "singleSelect",
+    valueOptions: [
         {
             value: 2, label: "Organization"
         },
         {
             value: 1, label: "Reseller"
-        },
-    ], hideSortIcons: true}
+        }],
+    hideSortIcons: true
+}
 
 export interface Organization extends DataModel {
     id: number;

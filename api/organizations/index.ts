@@ -22,7 +22,7 @@ export const getAllOrganizations = async (pageNumber: number = 1, pageSize: numb
     })
 }
 
-export const getOrganizationById = async (id: DataModelId) => {
+export const getOrganizationById = async (id) => {
     return await fetch(API_ROOT_URL + `/api/organizations/${id}`, {
         method: 'GET',
         headers: {
@@ -63,6 +63,17 @@ export const deleteOrganization = async (id: any) => {
         credentials: "include"
     })
 }
+
+export const restoreOrganization = async (id: any) => {
+    return await fetch(API_ROOT_URL + `/api/organizations/${id}/restore`, {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        credentials: "include"
+    })
+}
+
 
 export const getOrganizationsMock = (a, b): Promise<any> => {
     return new Promise ((resolve) => {

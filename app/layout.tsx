@@ -42,10 +42,18 @@ const NAVIGATION: ExtendedNavigation = [
   },
   {
     segment: 'organizations',
-    title: 'Organization list',
+    title: 'Organizations',
+    pattern: 'organizations{/:id}*',
     icon: <DashboardIcon />,
     roles: ['Admin']
   },
+  // {
+  //   segment: 'organizations/create',
+  //   title: 'Create Organization',
+  //   kind: undefined,
+  //   icon: <DashboardIcon />,
+  //   roles: ['Admin']
+  // },
   {
     segment: 'createOrganization',
     title: 'Create Organization',
@@ -139,19 +147,11 @@ export function MyAppProvider (props: { children: React.ReactNode }) {
           authentication={authentication}
           session={customSession}
       >
-        <DashboardLayout defaultSidebarCollapsed>
-          <PageContainer>
-            {/* preview-start */}
+        {/*<DashboardLayout defaultSidebarCollapsed>*/}
+        {/*  <PageContainer>*/}
             {props.children}
-            <Crud<Organization>
-                dataSource={organizationsDataSource}
-                dataSourceCache={null}
-                rootPath="/organizations"
-                initialPageSize={10}
-            />
-            {/* preview-end */}
-          </PageContainer>
-        </DashboardLayout>
+        {/*  </PageContainer>*/}
+        {/*</DashboardLayout>*/}
       </AppProvider>
       )
 }

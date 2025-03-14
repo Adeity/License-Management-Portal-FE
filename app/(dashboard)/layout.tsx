@@ -33,19 +33,17 @@ export default function Layout(props: { children: React.ReactNode }) {
         })
     }, []);
 
-    return (props.children)
-  //   return (
-  //     <DashboardLayout>
-  //         <PageContainer>
-  //             {loading ? (
-  //                 <div style={{ display: 'flex', justifyContent: 'center', alignItems: '', height: '100vh' }}>
-  //                     <CircularProgress  size={"5rem"}/>
-  //                 </div>
-  //             ) : (
-  //                 props.children
-  //                 <Crud
-  //             )}
-  //         </PageContainer>
-  //   </DashboardLayout>
-  // )
+    return (
+      <DashboardLayout>
+          <PageContainer>
+              {loading ? (
+                  <div style={{ display: 'flex', justifyContent: 'center', alignItems: '', height: '100vh' }}>
+                      <CircularProgress  size={"5rem"}/>
+                  </div>
+              ) : (
+                  props.children
+              )}
+          </PageContainer>
+    </DashboardLayout>
+    )
 }
