@@ -1,4 +1,4 @@
-"use client"
+﻿"use client"
 import * as React from 'react';
 import Typography from '@mui/material/Typography';
 import {getAllOrganizations} from "@/api/organizations";
@@ -10,6 +10,7 @@ import {Button} from "@mui/material";
 import {useRouter} from "next/navigation";
 import ReplayIcon from '@mui/icons-material/Replay';
 import {PageContainer} from "@toolpad/core/PageContainer";
+import {getResellersOrganizations} from "@/api/resellers";
 
 const tableHeadCells: readonly HeadCell[] = [
     {
@@ -54,7 +55,7 @@ export default function OrganizationList() {
     useEffect(() => {
         setLoading(true)
         setError(null)
-        getAllOrganizations(pageNumber, rowsPerPage).then((res) => {
+        getResellersOrganizations(pageNumber, rowsPerPage).then((res) => {
             return res.json()
         })
             .then((data) => {
@@ -76,30 +77,29 @@ export default function OrganizationList() {
                 setLoading(false)
             })
     }, [pageNumber, rowsPerPage, refetch]);
-    
+
     const handleRefetch = () => {
         setRefetch(!refetch)
     }
 
     return (
-            <PageContainer >
-                {error && <Typography>Error: {error}</Typography>}
-                {!error && data &&
-                    <div>
-                        <Button variant="text" onClick={handleRefetch}><ReplayIcon /></Button>
-                        <Button variant="contained" onClick={() => router.push("/organizations/create")}>Create</Button>
-                        {loading ? (<Typography>Loading...</Typography>) :
-                            <EnhancedTable paginatedData={data}
-                                           headCells={tableHeadCells}
-                                           title={"Organizations"}
-                                           rowsPerPage={rowsPerPage}
-                                           orgRedirectPath={"/organizations"}
-                                           setPageNumber={setPageNumber}
-                                           setRowsPerPage={setRowsPerPage}
-                            />
-                        }
-                    </div>
-                }
-            </PageContainer>
+        <PageContainer >
+            {error && <Typography>Error: {error}</Typography>}
+            {!error && data &&
+                <div>
+                    <Button variant="text" onClick={handleRefetch}><ReplayIcon /></Button>
+                    {loading ? (<Typography>Loading...</Typography>) :
+                        <EnhancedTable paginatedData={data}
+                                       headCells={tableHeadCells}
+                                       title={"Organizations"}
+                                       orgRedirectPath={"/reseller/organizations"}
+                                       rowsPerPage={rowsPerPage}
+                                       setPageNumber={setPageNumber}
+                                       setRowsPerPage={setRowsPerPage}
+                        />
+                    }
+                </div>
+            }
+        </PageContainer>
     );
 }

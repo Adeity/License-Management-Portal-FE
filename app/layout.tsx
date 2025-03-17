@@ -47,26 +47,13 @@ const NAVIGATION: ExtendedNavigation = [
     icon: <DashboardIcon />,
     roles: ['Admin']
   },
-  // {
-  //   segment: 'organizations/create',
-  //   title: 'Create Organization',
-  //   kind: undefined,
-  //   icon: <DashboardIcon />,
-  //   roles: ['Admin']
-  // },
-  // {
-  //   segment: 'createOrganization',
-  //   title: 'Create Organization',
-  //   icon: <DashboardIcon />,
-  //   roles: ['Admin']
-  // },
-  // {
-  //   segment: 'notes',
-  //   title: 'Notes',
-  //   icon: <DashboardIcon />,
-  //   pattern: 'notes{/:noteId}*',
-  //   roles: ['Admin', 'Reseller', 'Customer']
-  // },
+  {
+    segment: 'reseller',
+    title: 'My Organizations',
+    kind: undefined,
+    icon: <BusinessIcon />,
+    roles: ['Reseller']
+  },
   // {
   //   segment: 'organizations',
   //   title: 'Organizations',

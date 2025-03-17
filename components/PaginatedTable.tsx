@@ -135,13 +135,14 @@ interface EnhancedTableProps {
   paginatedData: PaginatedResponse<any>;
   headCells: readonly HeadCell[];
   title: string;
+  orgRedirectPath: string;
   rowsPerPage: number;
   setPageNumber: (pageNumber: number) => void;
   setRowsPerPage: (rowsPerPage: number) => void;
 }
 export default function EnhancedTable(props: EnhancedTableProps) {
   const router = useRouter();
-  const {paginatedData, headCells, title, rowsPerPage, setPageNumber, setRowsPerPage} = props
+  const {paginatedData, headCells, title, rowsPerPage, setPageNumber, setRowsPerPage, orgRedirectPath} = props
   const {totalItems, pageNumber, nextPage, previousPage, totalPages, items: rows} = paginatedData
   const page = pageNumber - 1
   const [order, setOrder] = React.useState<Order>('asc');
@@ -160,7 +161,7 @@ export default function EnhancedTable(props: EnhancedTableProps) {
 
   const handleClick = (event: React.MouseEvent<unknown>, id: number) => {
     console.log('selected org id', id)
-    router.push(`/organizations/${id}`)
+    router.push(`${orgRedirectPath}/${id}`)
   };
 
   const handleChangePage = (event: unknown, newPage: number) => {
