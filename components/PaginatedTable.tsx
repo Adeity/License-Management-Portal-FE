@@ -40,6 +40,7 @@ interface EnhancedTableHeadProps {
   numSelected: number;
   onSelectAllClick: (event: React.ChangeEvent<HTMLInputElement>) => void;
   order: Order;
+  loading: boolean
   orderBy: string;
   rowCount: number;
   headCells: readonly HeadCell[];
@@ -142,7 +143,7 @@ interface EnhancedTableProps {
 }
 export default function EnhancedTable(props: EnhancedTableProps) {
   const router = useRouter();
-  const {paginatedData, headCells, title, rowsPerPage, setPageNumber, setRowsPerPage, orgRedirectPath} = props
+  const {paginatedData, headCells, title, rowsPerPage, setPageNumber, setRowsPerPage, orgRedirectPath, loading} = props
   const {totalItems, pageNumber, nextPage, previousPage, totalPages, items: rows} = paginatedData
   const page = pageNumber - 1
   const [order, setOrder] = React.useState<Order>('asc');

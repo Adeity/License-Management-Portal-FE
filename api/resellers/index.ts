@@ -20,3 +20,13 @@ export const getResellersOrganizations = async (pageNumber: number = 1, pageSize
         credentials: "include"
     })
 }
+
+export const getPackageDetails = async () => {
+    return await fetch(API_ROOT_URL + `/api/resellers/packageDetails`, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        credentials: "include"
+    })
+}
