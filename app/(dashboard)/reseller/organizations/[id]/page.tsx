@@ -11,7 +11,7 @@ import {Stack} from "@mui/system";
 import {useEffect, useState} from "react";
 import EnhancedTable from "@/components/PaginatedTable";
 import {HeadCell} from "@/types/HeadCell";
-import {getLicensesByOrgId} from "@/api/licenses";
+import {generateLicensePost, getLicensesByOrgId} from "@/api/licenses";
 import {SimpleDialog} from "@/components/GenerateLicenseModal";
 import useFetchApi from "@/hooks/useFetchApi";
 import {getPackageDetails} from "@/api/resellers";
@@ -94,9 +94,15 @@ export default function HomePage() {
     const [rowsPerPage, setRowsPerPage] = useState<number>(10);
 
     const [openedTabValue, setOpenedTabValue] = React.useState(0);
+
+    // Generate License Dialog
+    const [generatingLicense, setGeneratingLicense] = React.useState(false);
+    const [generatingLicenseResultSuccess, setGeneratingLicenseResultSuccess] = React.useState(false);
+    const [generatingResult, setGeneratingResult] = React.useState("");
+
     const {data: dataOrgDetail, error: errorOrgDetail, loading: loadingOrgDetail, refetch: refetchOrgDetail} = useFetchApi(() => getOrganizationById(params.id))
     const {data: dataLicenses, error: errorLicenses, loading: loadingLicense, refetch: refetchLicenses} = useFetchApi(() => getLicensesByOrgId(params.id, pageNumber, rowsPerPage))
-    const {data: dataOrgPackageDetails, error: errorOrgPackageDetails, loading: loadingOrgPackageDetails, refetch: refetchOrgPackageDetails} = useFetchApi(getPackageDetails())
+    const {data: dataOrgPackageDetails, error: errorOrgPackageDetails, loading: loadingOrgPackageDetails, refetch: refetchOrgPackageDetails} = useFetchApi(getPackageDetails)
 
     useEffect(() => {
         refetchLicenses()
@@ -106,12 +112,31 @@ export default function HomePage() {
         setDialogOpen(true);
     };
 
+    const generateLicense = async (packageDetailsId: number, quantityOfLicenses: number = 1) => {
+        console.log('to generate license for package details id:', packageDetailsId)
+        console.log('to generate license for quantity number', quantityOfLicenses)
+        console.log('to generate license for organization account', params.id)
+        setGeneratingLicense(true)
+        const payload = {
+            OrganizationAccountId: params.id,
+            PackageDetailsId: packageDetailsId,
+            QuantityOfLicenses: quantityOfLicenses
+        }
+        await generateLicensePost(payload).then((res) => {
+            return res.json()
+        }).then(res => {
+            console.log('res from generate:', res)
+            setGeneratingLicense(false)
+            setGeneratingResult(res.serialNumber)
+        })
+    }
+
     const handleCloseDialog = () => {
         setDialogOpen(false);
         // setSelectedValue(value);
     };
 
-    if (loadingOrgDetail) return (<div>Loading...</div>)
+    if (loadingOrgDetail || loadingOrgPackageDetails) return (<div>Loading...</div>)
     if (errorOrgDetail) return (<div>Error: {errorOrgDetail}</div>)
     if (errorLicenses) return (<div>Error: {errorLicenses}</div>)
     const handleTabValueChange = (event: React.SyntheticEvent, newValue: number) => {
@@ -126,13 +151,18 @@ export default function HomePage() {
         {title: breadcrumbTitle, path}
     ];
 
-    console.log('data licenses:', dataLicenses)
     return (
         <PageContainer breadcrumbs={breadcrumbs} title={pageTitle}>
 
             <SimpleDialog
                 open={dialogOpen}
                 onClose={handleCloseDialog}
+                packageDetails={dataOrgPackageDetails}
+                organizationAccountName={dataOrgDetail.name}
+                onSubmit={generateLicense}
+                generatingLicense={generatingLicense}
+                generatingResult={generatingResult}
+                // generatingLicense={generatingLicense}
             ></SimpleDialog>
             <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
                 <Tabs value={openedTabValue} onChange={handleTabValueChange} aria-label="basic tabs example">

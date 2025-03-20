@@ -161,7 +161,6 @@ export default function EnhancedTable(props: EnhancedTableProps) {
   };
 
   const handleClick = (event: React.MouseEvent<unknown>, id: number) => {
-    console.log('selected org id', id)
     router.push(`${orgRedirectPath}/${id}`)
   };
 

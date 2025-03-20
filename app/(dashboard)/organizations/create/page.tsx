@@ -79,7 +79,6 @@ export default function CreatOrganizationPage() {
         const res = await createOrganization(buildOrgInputdata())
         if (res.ok) {
             router.push(`/organizations`)
-            console.log('Organization created')
         } else {
             console.error('Organization creation failed')
         }

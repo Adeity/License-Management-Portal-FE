@@ -9,3 +9,14 @@ export const getLicensesByOrgId = async (id, pageIndex, pageSize) => {
         credentials: "include"
     })
 }
+
+export const generateLicensePost = async (payload) => {
+    return await fetch(API_ROOT_URL + `/api/licenses/generate`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(payload),
+        credentials: "include"
+    })
+}

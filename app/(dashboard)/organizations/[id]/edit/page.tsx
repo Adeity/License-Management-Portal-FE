@@ -67,7 +67,6 @@ export default function HomePage() {
         setParentOrganizationValidationError('')
     }
     const findValidationErrors = () => {
-        console.log('finding val errors')
         clearValidations()
         let foundError = false;
         if (orgType === "Organization"){
@@ -76,7 +75,6 @@ export default function HomePage() {
                 foundError = true;
             }
         }
-        console.log('checking name:', name)
         if (name.length < 3) {
             setNameValidationError("Name must be at least 3 characters long")
             foundError = true;
@@ -85,8 +83,6 @@ export default function HomePage() {
             setNameValidationError("Name is required")
             foundError = true;
         }
-        console.log('fuck there is a nerror')
-        console.log(nameValidationError)
         return foundError
     }
     
@@ -94,7 +90,6 @@ export default function HomePage() {
         if (findValidationErrors()) {
             return;
         }
-        console.log('continuing wtf?')
 
         const orgTypeId = availableOrganizationTypes.find(e => {
             return e.name === orgType
@@ -110,7 +105,6 @@ export default function HomePage() {
         const res = await updateOrganization(buildOrgInputdata())
         if (res.ok) {
             router.push(`/organizations/${params.id}`)
-            console.log('Organization created')
         } else {
             console.error('Organization creation failed')
         }
