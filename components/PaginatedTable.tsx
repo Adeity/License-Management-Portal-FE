@@ -24,17 +24,6 @@ import {PaginatedResponse} from "@/types/PaginatedResponse";
 import {useRouter} from "next/navigation";
 import {Skeleton} from "@mui/material";
 
-
-function descendingComparator<T>(a: T, b: T, orderBy: keyof T) {
-  if (b[orderBy] < a[orderBy]) {
-    return -1;
-  }
-  if (b[orderBy] > a[orderBy]) {
-    return 1;
-  }
-  return 0;
-}
-
 type Order = 'asc' | 'desc';
 
 interface EnhancedTableHeadProps {
@@ -59,20 +48,8 @@ function EnhancedTableHead(props: EnhancedTableHeadProps) {
                   key={headCell.id}
                   align={headCell.numeric ? 'right' : 'left'}
                   padding={headCell.disablePadding ? 'none' : 'normal'}
-                  // sortDirection={orderBy === headCell.id ? order : false}
               >
                 {headCell.label}
-                {/*<TableSortLabel*/}
-                {/*    active={orderBy === headCell.id}*/}
-                {/*    direction={orderBy === headCell.id ? order : 'asc'}*/}
-                {/*    onClick={createSortHandler(headCell.id)}*/}
-                {/*>*/}
-                {/*  {orderBy === headCell.id ? (*/}
-                {/*      <Box component="span" sx={visuallyHidden}>*/}
-                {/*        {order === 'desc' ? 'sorted descending' : 'sorted ascending'}*/}
-                {/*      </Box>*/}
-                {/*  ) : null}*/}
-                {/*</TableSortLabel>*/}
               </TableCell>
           ))}
         </TableRow>
@@ -117,19 +94,6 @@ function EnhancedTableToolbar(props: EnhancedTableToolbarProps) {
               {title}
             </Typography>
         )}
-        {/*{numSelected > 0 ? (*/}
-        {/*    <Tooltip title="Delete">*/}
-        {/*      <IconButton>*/}
-        {/*        <DeleteIcon />*/}
-        {/*      </IconButton>*/}
-        {/*    </Tooltip>*/}
-        {/*) : (*/}
-        {/*    <Tooltip title="Filter list">*/}
-        {/*      <IconButton>*/}
-        {/*        <FilterListIcon />*/}
-        {/*      </IconButton>*/}
-        {/*    </Tooltip>*/}
-        {/*)}*/}
       </Toolbar>
   );
 }
