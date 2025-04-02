@@ -110,6 +110,8 @@ export default function HomePage() {
     const params = useParams()
 
     const [dialogOpen, setDialogOpen] = React.useState(false);
+    const [generatingError, setGeneratingError] = useState<string | null>(null);
+
     const [pageNumber, setPageNumber] = useState<number>(0);
     const [rowsPerPage, setRowsPerPage] = useState<number>(10);
 
@@ -138,27 +140,41 @@ export default function HomePage() {
     };
 
     const generateLicense = async (packageDetailsId: number, quantityOfLicenses: number = 1) => {
-        console.log('to generate license for package details id:', packageDetailsId)
-        console.log('to generate license for quantity number', quantityOfLicenses)
-        console.log('to generate license for organization account', params.id)
-        setGeneratingLicense(true)
+        setGeneratingLicense(true);
+        setGeneratingError(null);
+        setGeneratingResult("");
+
         const payload = {
             OrganizationAccountId: params.id,
             PackageDetailsId: packageDetailsId,
             QuantityOfLicenses: quantityOfLicenses
+        };
+
+        try {
+            const res = await generateLicensePost(payload);
+            const result = await res.json();
+
+            if (!res.ok) {
+                throw new Error(result.message || "Failed to create license");
+            }
+
+            setGeneratingResult(result.serialNumber);
+        } catch (err: any) {
+            setGeneratingError(err.message || "Something went wrong");
+        } finally {
+            setGeneratingLicense(false);
         }
-        await generateLicensePost(payload).then((res) => {
-            return res.json()
-        }).then(res => {
-            console.log('res from generate:', res)
-            setGeneratingLicense(false)
-            setGeneratingResult(res.serialNumber)
-        })
-    }
+    };
+
+
 
     const handleCloseDialog = () => {
         setDialogOpen(false);
-        // setSelectedValue(value);
+        if (generatingResult) {
+            refetchLicenses(); // <- this will refresh the license table
+        }
+        setGeneratingResult("");
+        setGeneratingError(null);
     };
 
     if (errorOrgDetail) return (<div>Error: {errorOrgDetail}</div>)
@@ -186,7 +202,9 @@ export default function HomePage() {
                     onSubmit={generateLicense}
                     generatingLicense={generatingLicense}
                     generatingResult={generatingResult}
+                    generatingError={generatingError}
                 />
+
             )}
             <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
                 <Tabs value={openedTabValue} onChange={handleTabValueChange} aria-label="basic tabs example">
