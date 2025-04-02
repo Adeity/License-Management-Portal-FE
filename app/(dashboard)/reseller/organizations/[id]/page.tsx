@@ -5,7 +5,7 @@ import {PageContainer} from "@toolpad/core/PageContainer";
 import {useActivePage} from "@toolpad/core";
 import {useParams} from "next/navigation";
 import Box from "@mui/material/Box";
-import {Button, Tab, Tabs, TextField} from "@mui/material";
+import {Button, Skeleton, Tab, Tabs, TextField} from "@mui/material";
 import useOrganizationById from "@/hooks/useOrganizationById";
 import {Stack} from "@mui/system";
 import {useEffect, useState} from "react";
@@ -60,10 +60,12 @@ interface TabPanelProps {
     children?: React.ReactNode;
     index: number;
     value: number;
+    loading?: boolean;
+    skeleton?: React.ReactNode;
 }
 
 function CustomTabPanel(props: TabPanelProps) {
-    const { children, value, index, ...other } = props;
+    const { children, value, index, loading, skeleton, ...other } = props;
 
     return (
         <div
@@ -73,10 +75,21 @@ function CustomTabPanel(props: TabPanelProps) {
             aria-labelledby={`simple-tab-${index}`}
             {...other}
         >
-            {value === index && <Box sx={{ p: 3 }}>{children}</Box>}
+            {value === index && <Box sx={{ p: 3 }}>{loading ? skeleton : children}</Box>}
         </div>
     );
 }
+
+const SkeletonLicenseTab = () => (
+    <Box>
+        <Stack spacing={1}>
+            {[...Array(5)].map((_, idx) => (
+                <Skeleton key={idx} variant="rectangular" height={40} />
+            ))}
+        </Stack>
+    </Box>
+);
+
 function a11yProps(index: number) {
     return {
         id: `simple-tab-${index}`,
@@ -84,6 +97,13 @@ function a11yProps(index: number) {
     };
 }
 
+const SkeletonForm = () => (
+    <Stack>
+        {[...Array(4)].map((_, index) => (
+            <Skeleton key={index} variant="rectangular" height={56} sx={{ marginY: 2 }} />
+        ))}
+    </Stack>
+);
 
 export default function HomePage() {
     const activePage = useActivePage();
@@ -136,14 +156,13 @@ export default function HomePage() {
         // setSelectedValue(value);
     };
 
-    if (loadingOrgDetail || loadingOrgPackageDetails) return (<div>Loading...</div>)
     if (errorOrgDetail) return (<div>Error: {errorOrgDetail}</div>)
     if (errorLicenses) return (<div>Error: {errorLicenses}</div>)
     const handleTabValueChange = (event: React.SyntheticEvent, newValue: number) => {
         setOpenedTabValue(newValue);
     };
 
-    const pageTitle = `Detail org`
+    const pageTitle = loadingOrgDetail ? "Loading..." : dataOrgDetail.name;
     const breadcrumbTitle = `${params.id}`;
     const path = `/reseller/organizations/${params.id}`
     const breadcrumbs = [
@@ -153,71 +172,93 @@ export default function HomePage() {
 
     return (
         <PageContainer breadcrumbs={breadcrumbs} title={pageTitle}>
-
-            <SimpleDialog
-                open={dialogOpen}
-                onClose={handleCloseDialog}
-                packageDetails={dataOrgPackageDetails}
-                organizationAccountName={dataOrgDetail.name}
-                onSubmit={generateLicense}
-                generatingLicense={generatingLicense}
-                generatingResult={generatingResult}
-                // generatingLicense={generatingLicense}
-            ></SimpleDialog>
+            {dataOrgDetail && (
+                <SimpleDialog
+                    open={dialogOpen}
+                    onClose={handleCloseDialog}
+                    packageDetails={dataOrgPackageDetails}
+                    organizationAccountName={dataOrgDetail.name}
+                    onSubmit={generateLicense}
+                    generatingLicense={generatingLicense}
+                    generatingResult={generatingResult}
+                />
+            )}
             <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
                 <Tabs value={openedTabValue} onChange={handleTabValueChange} aria-label="basic tabs example">
                     <Tab label="Detail" {...a11yProps(0)} />
                     <Tab label="Licenses" {...a11yProps(1)} />
                 </Tabs>
             </Box>
-            <CustomTabPanel value={openedTabValue} index={0}>
-                <Stack>
-                    <TextField helperText=""
-                               id="outlined-basic"
-                               label="Id"
-                               variant="outlined"
-                               defaultValue={dataOrgDetail.id}
-                               sx={{paddingTop: '1rem', paddingBottom: '1rem'}}
-                               slotProps={{input: {readOnly: true}}}
-                    />
-                    <TextField helperText=""
-                               id="outlined-basic"
-                               label="Name"
-                               variant="outlined"
-                               defaultValue={dataOrgDetail.name}
-                               sx={{paddingTop: '1rem', paddingBottom: '1rem'}}
-                               slotProps={{input: {readOnly: true}}}
-                    />
+            <CustomTabPanel
+                value={openedTabValue}
+                index={0}
+                loading={loadingOrgDetail || loadingOrgPackageDetails}
+                skeleton={<SkeletonForm />}>
+                {dataOrgDetail && (
+                    <Stack>
+                        <TextField
+                            helperText=""
+                            label="Id"
+                            variant="outlined"
+                            defaultValue={dataOrgDetail.id}
+                            sx={{ paddingY: '1rem' }}
+                            slotProps={{ input: { readOnly: true } }}
+                        />
+                        <TextField
+                            helperText=""
+                            label="Name"
+                            variant="outlined"
+                            defaultValue={dataOrgDetail.name}
+                            sx={{ paddingY: '1rem' }}
+                            slotProps={{ input: { readOnly: true } }}
+                        />
+                        <TextField
+                            helperText=""
+                            label="Type"
+                            variant="outlined"
+                            defaultValue={dataOrgDetail.organizationType}
+                            sx={{ paddingY: '1rem' }}
+                            slotProps={{ input: { readOnly: true } }}
+                        />
+                        <TextField
+                            helperText=""
+                            label="Parent Organization"
+                            variant="outlined"
+                            defaultValue={dataOrgDetail.parentOrganization || 'Null'}
+                            sx={{ paddingY: '1rem' }}
+                            slotProps={{ input: { readOnly: true } }}
+                        />
+                    </Stack>
+                )}
+            </CustomTabPanel>
 
-                    <TextField helperText=""
-                               id="outlined-basic"
-                               label="Type"
-                               variant="outlined"
-                               defaultValue={dataOrgDetail.organizationType}
-                               sx={{paddingTop: '1rem', paddingBottom: '1rem'}}
-                               slotProps={{input: {readOnly: true}}}
-                    />
-                    <TextField helperText=""
-                               id="outlined-basic"
-                               label="Parent Organization"
-                               variant="outlined"
-                               sx={{paddingTop: '1rem', paddingBottom: '1rem'}}
-                               defaultValue={dataOrgDetail.parentOrganization ? dataOrgDetail.parentOrganization : "Null"}
-                               slotProps={{input: {readOnly: true}}}
-                    />
-                </Stack>
+            <CustomTabPanel
+                value={openedTabValue}
+                index={1}
+                loading={false}
+                skeleton={<SkeletonLicenseTab />}>
+                {loadingOrgDetail || loadingOrgPackageDetails ?
+                    <Skeleton variant="rectangular" width={180} height={40} sx={{ mb: 2 }} />
+                    : (
+                    <Button
+                        variant={'contained'}
+                        onClick={() => setDialogOpen(true)}
+                        sx={{ marginBottom: 1 }}>
+                        Create new license
+                    </Button>
+                )}
+                <EnhancedTable
+                    paginatedData={dataLicenses}
+                    loading={loadingLicense}
+                    headCells={tableHeadCells}
+                    title={'Licenses'}
+                    rowsPerPage={rowsPerPage}
+                    orgRedirectPath={'/licenses'}
+                    setPageNumber={setPageNumber}
+                    setRowsPerPage={setRowsPerPage}
+                />
             </CustomTabPanel>
-            <CustomTabPanel value={openedTabValue} index={1}>
-                <Button onClick={() => setDialogOpen(true)} sx={{marginBottom: 1}}>Create new license</Button>
-                <EnhancedTable paginatedData={dataLicenses}
-                               headCells={tableHeadCells}
-                               title={"Licenses"}
-                               rowsPerPage={rowsPerPage}
-                               orgRedirectPath={"/licenses"}
-                               setPageNumber={setPageNumber}
-                               setRowsPerPage={setRowsPerPage}
-                               />
-            </CustomTabPanel>
+
         </PageContainer>
     );
 }

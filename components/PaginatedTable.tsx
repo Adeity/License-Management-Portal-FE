@@ -22,6 +22,7 @@ import {visuallyHidden} from '@mui/utils';
 import {HeadCell} from '@/types/HeadCell';
 import {PaginatedResponse} from "@/types/PaginatedResponse";
 import {useRouter} from "next/navigation";
+import {Skeleton} from "@mui/material";
 
 
 function descendingComparator<T>(a: T, b: T, orderBy: keyof T) {
@@ -133,19 +134,22 @@ function EnhancedTableToolbar(props: EnhancedTableToolbarProps) {
   );
 }
 interface EnhancedTableProps {
-  paginatedData: PaginatedResponse<any>;
+  paginatedData: PaginatedResponse<any> | null;
   headCells: readonly HeadCell[];
   title: string;
   orgRedirectPath: string;
   rowsPerPage: number;
   setPageNumber: (pageNumber: number) => void;
   setRowsPerPage: (rowsPerPage: number) => void;
+  loading: boolean;
 }
 export default function EnhancedTable(props: EnhancedTableProps) {
   const router = useRouter();
   const {paginatedData, headCells, title, rowsPerPage, setPageNumber, setRowsPerPage, orgRedirectPath, loading} = props
-  const {totalItems, pageNumber, nextPage, previousPage, totalPages, items: rows} = paginatedData
-  const page = pageNumber - 1
+  const rows = paginatedData?.items ?? [];
+  const totalItems = paginatedData?.totalItems ?? 0;
+  const pageNumber = paginatedData?.pageNumber ?? 1;
+  const page = pageNumber - 1;
   const [order, setOrder] = React.useState<Order>('asc');
   const [orderBy, setOrderBy] = React.useState<string>('name');
   const [selected, setSelected] = React.useState<readonly number[]>([]);
@@ -196,31 +200,44 @@ export default function EnhancedTable(props: EnhancedTableProps) {
                   headCells={headCells}
               />
               <TableBody>
-                {rows.map((row, index) => {
-                  const isItemSelected = selected.includes(row.id);
-                  const labelId = `enhanced-table-checkbox-${index}`;
-                  return (
-                      <TableRow
-                          hover
-                          onClick={(event) => handleClick(event, row.id)}
-                          role="checkbox"
-                          aria-checked={isItemSelected}
-                          tabIndex={-1}
-                          key={index}
-                          selected={isItemSelected}
-                          sx={{ cursor: 'pointer' }}
-                      >
-                        {headCells.map((headCell) => {
-                            return (
+                {loading || !paginatedData ? (
+                    [...Array(rowsPerPage)].map((_, index) => (
+                        <TableRow key={index}>
+                          {headCells.map((cell) => (
+                              <TableCell key={cell.id}>
+                                <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                                  <Skeleton variant="text" width="80%" />
+                                </Box>
+                              </TableCell>
+                          ))}
+                        </TableRow>
+                    ))
+                ) : (
+                    rows.map((row, index) => {
+                      const isItemSelected = selected.includes(row.id);
+                      const labelId = `enhanced-table-checkbox-${index}`;
+                      return (
+                          <TableRow
+                              hover
+                              onClick={(event) => handleClick(event, row.id)}
+                              role="checkbox"
+                              aria-checked={isItemSelected}
+                              tabIndex={-1}
+                              key={index}
+                              selected={isItemSelected}
+                              sx={{ cursor: 'pointer' }}
+                          >
+                            {headCells.map((headCell) => (
                                 <TableCell key={headCell.id} align={headCell.numeric ? 'right' : 'left'}>
                                   {row[headCell.id]}
                                 </TableCell>
-                            )
-                          })}
-                      </TableRow>
-                  );
-                })}
+                            ))}
+                          </TableRow>
+                      );
+                    })
+                )}
               </TableBody>
+
             </Table>
           </TableContainer>
           <TablePagination
@@ -231,6 +248,7 @@ export default function EnhancedTable(props: EnhancedTableProps) {
               page={page}
               onPageChange={handleChangePage}
               onRowsPerPageChange={handleChangeRowsPerPage}
+              disabled={loading || !paginatedData}
           />
         </Paper>
         <FormControlLabel
