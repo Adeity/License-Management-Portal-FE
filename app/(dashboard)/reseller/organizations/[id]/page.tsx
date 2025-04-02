@@ -120,9 +120,14 @@ export default function HomePage() {
     const [generatingLicenseResultSuccess, setGeneratingLicenseResultSuccess] = React.useState(false);
     const [generatingResult, setGeneratingResult] = React.useState("");
 
-    const {data: dataOrgDetail, error: errorOrgDetail, loading: loadingOrgDetail, refetch: refetchOrgDetail} = useFetchApi(() => getOrganizationById(params.id))
-    const {data: dataLicenses, error: errorLicenses, loading: loadingLicense, refetch: refetchLicenses} = useFetchApi(() => getLicensesByOrgId(params.id, pageNumber, rowsPerPage))
-    const {data: dataOrgPackageDetails, error: errorOrgPackageDetails, loading: loadingOrgPackageDetails, refetch: refetchOrgPackageDetails} = useFetchApi(getPackageDetails)
+    const {data: dataOrgDetail, error: errorOrgDetail, loading: loadingOrgDetail} = useFetchApi(() => getOrganizationById(params.id))
+    const {
+        data: dataLicenses,
+        error: errorLicenses,
+        loading: loadingLicense,
+        refetch: refetchLicenses
+    } = useFetchApi(() => getLicensesByOrgId(params.id, pageNumber, rowsPerPage), [pageNumber, rowsPerPage]);
+    const {data: dataOrgPackageDetails, error: errorOrgPackageDetails, loading: loadingOrgPackageDetails} = useFetchApi(getPackageDetails)
 
     useEffect(() => {
         refetchLicenses()

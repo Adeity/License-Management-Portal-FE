@@ -1,14 +1,15 @@
-﻿import {useEffect, useState} from "react";
-import {getResellers} from "@/api/resellers";
+﻿// hooks/useFetchApi.ts
 
-const useFetchApi = (fetchFn) => {
+import { useEffect, useState } from "react";
+
+const useFetchApi = (fetchFn: () => Promise<Response>, dependencies: any[] = []) => {
     const [data, setData] = useState(null);
-    const [error, setError] = useState(null);
+    const [error, setError] = useState<string | null>(null);
     const [loading, setLoading] = useState(true);
-    const [refetchVar, setRefetchVar] = useState(true)
+    const [refetchToken, setRefetchToken] = useState(0); // force reload when manually refetching
 
     const refetch = () => {
-        setRefetchVar(!refetchVar)
+        setRefetchToken(prev => prev + 1);
     }
 
     useEffect(() => {
@@ -21,16 +22,18 @@ const useFetchApi = (fetchFn) => {
                 }
                 const result = await response.json();
                 setData(result);
-            } catch (error) {
-                setError(error.message);
+                setError(null);
+            } catch (error: any) {
+                setError(error.message || 'Something went wrong');
             } finally {
                 setLoading(false);
             }
         };
-        fetchData();
-    }, []);
 
-    return { data, error, loading, refetch};
+        fetchData();
+    }, [...dependencies, refetchToken]); // will refetch when deps or manual refetch changes
+
+    return { data, error, loading, refetch };
 };
 
 export default useFetchApi;
