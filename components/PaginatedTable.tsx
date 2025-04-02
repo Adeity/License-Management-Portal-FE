@@ -107,7 +107,7 @@ interface EnhancedTableProps {
   setRowsPerPage: (rowsPerPage: number) => void;
   loading: boolean;
 }
-export default function EnhancedTable(props: EnhancedTableProps) {
+export default function PaginatedTable(props: EnhancedTableProps) {
   const router = useRouter();
   const {paginatedData, headCells, title, rowsPerPage, setPageNumber, setRowsPerPage, orgRedirectPath, loading} = props
   const rows = paginatedData?.items ?? [];

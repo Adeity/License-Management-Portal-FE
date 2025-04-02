@@ -9,7 +9,7 @@ import {Button, Skeleton, Tab, Tabs, TextField} from "@mui/material";
 import useOrganizationById from "@/hooks/useOrganizationById";
 import {Stack} from "@mui/system";
 import {useEffect, useState} from "react";
-import EnhancedTable from "@/components/PaginatedTable";
+import PaginatedTable from "@/components/PaginatedTable";
 import {HeadCell} from "@/types/HeadCell";
 import {generateLicensePost, getLicensesByOrgId} from "@/api/licenses";
 import {SimpleDialog} from "@/components/GenerateLicenseModal";
@@ -72,6 +72,7 @@ function CustomTabPanel(props: TabPanelProps) {
             role="tabpanel"
             hidden={value !== index}
             id={`simple-tabpanel-${index}`}
+            data-testid={`tab-panel-${index}`}
             aria-labelledby={`simple-tab-${index}`}
             {...other}
         >
@@ -183,6 +184,7 @@ export default function HomePage() {
         setOpenedTabValue(newValue);
     };
 
+    console.log('loadingOrgDetail', loadingOrgDetail, dataOrgDetail)
     const pageTitle = loadingOrgDetail ? "Loading..." : dataOrgDetail.name;
     const breadcrumbTitle = `${params.id}`;
     const path = `/reseller/organizations/${params.id}`
@@ -270,7 +272,7 @@ export default function HomePage() {
                         Create new license
                     </Button>
                 )}
-                <EnhancedTable
+                <PaginatedTable
                     paginatedData={dataLicenses}
                     loading={loadingLicense}
                     headCells={tableHeadCells}

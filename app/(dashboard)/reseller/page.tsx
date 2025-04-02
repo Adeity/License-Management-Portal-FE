@@ -2,7 +2,7 @@
 import * as React from 'react';
 import Typography from '@mui/material/Typography';
 import {getAllOrganizations} from "@/api/organizations";
-import EnhancedTable from "@/components/PaginatedTable";
+import PaginatedTable from "@/components/PaginatedTable";
 import {PaginatedResponse} from "@/types/PaginatedResponse";
 import {HeadCell} from "@/types/HeadCell";
 import {useEffect, useState} from "react";
@@ -89,13 +89,13 @@ export default function OrganizationList() {
                 <div>
                     <Button variant="text" onClick={handleRefetch}><ReplayIcon /></Button>
                     {loading ? (<Typography>Loading...</Typography>) :
-                        <EnhancedTable paginatedData={data}
-                                       headCells={tableHeadCells}
-                                       title={"Organizations"}
-                                       orgRedirectPath={"/reseller/organizations"}
-                                       rowsPerPage={rowsPerPage}
-                                       setPageNumber={setPageNumber}
-                                       setRowsPerPage={setRowsPerPage}
+                        <PaginatedTable paginatedData={data}
+                                        headCells={tableHeadCells}
+                                        title={"Organizations"}
+                                        orgRedirectPath={"/reseller/organizations"}
+                                        rowsPerPage={rowsPerPage}
+                                        setPageNumber={setPageNumber}
+                                        setRowsPerPage={setRowsPerPage}
                         />
                     }
                 </div>
