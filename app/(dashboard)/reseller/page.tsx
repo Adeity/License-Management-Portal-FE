@@ -44,14 +44,13 @@ const getParentOrganization = (i) => {
 }
 
 export default function OrganizationList() {
-    // return (null)
+    const router = useRouter();
     const [pageNumber, setPageNumber] = useState<number>(0);
     const [rowsPerPage, setRowsPerPage] = useState<number>(10);
     const [data, setData] = useState<PaginatedResponse<Organization> | null>(null)
     const [error, setError] = useState<string | null>(null);
     const [loading, setLoading] = useState(true)
     const [refetch, setRefetch] = useState(false)
-    const router = useRouter();
     useEffect(() => {
         setLoading(true)
         setError(null)
@@ -59,16 +58,6 @@ export default function OrganizationList() {
             return res.json()
         })
             .then((data) => {
-                const modifiedDataItems = []
-                // data.items.forEach(i => {
-                //     modifiedDataItems.push(
-                //         {
-                //             ...i,
-                //             parentOrganization: getParentOrganization(i)
-                //         }
-                //     )
-                // })
-                // data.items = modifiedDataItems;
                 setData(data);
                 setLoading(false)
             })
@@ -78,8 +67,8 @@ export default function OrganizationList() {
             })
     }, [pageNumber, rowsPerPage, refetch]);
 
-    const handleRefetch = () => {
-        setRefetch(!refetch)
+    const handleGoToCreateClick = () => {
+        router.push('/reseller/organizations/create')
     }
 
     return (
@@ -87,17 +76,17 @@ export default function OrganizationList() {
             {error && <Typography>Error: {error}</Typography>}
             {!error && data &&
                 <div>
-                    <Button variant="text" onClick={handleRefetch}><ReplayIcon /></Button>
-                    {loading ? (<Typography>Loading...</Typography>) :
+                    <Button variant="contained" onClick={handleGoToCreateClick}>CREATE ORGANIZATION</Button>
+
                         <PaginatedTable paginatedData={data}
                                         headCells={tableHeadCells}
                                         title={"Organizations"}
                                         orgRedirectPath={"/reseller/organizations"}
                                         rowsPerPage={rowsPerPage}
+                                        loading={loading}
                                         setPageNumber={setPageNumber}
                                         setRowsPerPage={setRowsPerPage}
                         />
-                    }
                 </div>
             }
         </PageContainer>

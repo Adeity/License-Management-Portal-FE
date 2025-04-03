@@ -195,7 +195,7 @@ export default function HomePage() {
 
     return (
         <PageContainer breadcrumbs={breadcrumbs} title={pageTitle}>
-            {dataOrgDetail && (
+            {(dataOrgDetail && dataOrgPackageDetails) && (
                 <GenerateLicenseModal
                     open={dialogOpen}
                     onClose={handleCloseDialog}
@@ -278,7 +278,7 @@ export default function HomePage() {
                     headCells={tableHeadCells}
                     title={'Licenses'}
                     rowsPerPage={rowsPerPage}
-                    orgRedirectPath={'/licenses'}
+                    orgRedirectPath={`/reseller/organizations/${params.id}/licenses`}
                     setPageNumber={setPageNumber}
                     setRowsPerPage={setRowsPerPage}
                 />

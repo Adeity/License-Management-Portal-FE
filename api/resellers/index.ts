@@ -30,3 +30,13 @@ export const getPackageDetails = async () => {
         credentials: "include"
     })
 }
+
+export const getLoggedResellerInfo = async () => {
+    return await fetch(API_ROOT_URL + `/api/resellers/logged-reseller-info`, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        credentials: "include"
+    })
+}
