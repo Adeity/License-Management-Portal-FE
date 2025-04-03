@@ -281,6 +281,7 @@ export default function HomePage() {
                     orgRedirectPath={`/reseller/organizations/${params.id}/licenses`}
                     setPageNumber={setPageNumber}
                     setRowsPerPage={setRowsPerPage}
+                    rowClickable={false}
                 />
             </CustomTabPanel>
 

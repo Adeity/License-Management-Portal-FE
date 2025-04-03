@@ -100,10 +100,11 @@ interface EnhancedTableProps {
   setPageNumber: (pageNumber: number) => void;
   setRowsPerPage: (rowsPerPage: number) => void;
   loading: boolean;
+  rowClickable?: boolean;
 }
 export default function PaginatedTable(props: EnhancedTableProps) {
   const router = useRouter();
-  const {paginatedData, headCells, title, rowsPerPage, setPageNumber, setRowsPerPage, orgRedirectPath, loading} = props
+  const {paginatedData, headCells, title, rowsPerPage, setPageNumber, setRowsPerPage, orgRedirectPath, loading, rowClickable = true} = props
   const rows = paginatedData?.items ?? [];
   const totalItems = paginatedData?.totalItems ?? 0;
   const pageNumber = paginatedData?.pageNumber ?? 1;
@@ -176,14 +177,14 @@ export default function PaginatedTable(props: EnhancedTableProps) {
                       const labelId = `enhanced-table-checkbox-${index}`;
                       return (
                           <TableRow
-                              hover
-                              onClick={(event) => handleClick(event, row.id)}
+                              hover={rowClickable}
+                              onClick={rowClickable ? (event) => handleClick(event, row.id) : undefined}
                               role="checkbox"
                               aria-checked={isItemSelected}
                               tabIndex={-1}
                               key={index}
                               selected={isItemSelected}
-                              sx={{ cursor: 'pointer' }}
+                              sx={{ cursor: rowClickable ? 'pointer' : 'default' }}
                           >
                             {headCells.map((headCell) => (
                                 <TableCell key={headCell.id} align={headCell.numeric ? 'right' : 'left'}>
