@@ -12,7 +12,7 @@ import {useEffect, useState} from "react";
 import PaginatedTable from "@/components/PaginatedTable";
 import {HeadCell} from "@/types/HeadCell";
 import {generateLicensePost, getLicensesByOrgId} from "@/api/licenses";
-import {SimpleDialog} from "@/components/GenerateLicenseModal";
+import {GenerateLicenseModal} from "@/components/GenerateLicenseModal";
 import useFetchApi from "@/hooks/useFetchApi";
 import {getPackageDetails} from "@/api/resellers";
 import {getOrganizationById} from "@/api/organizations";
@@ -196,7 +196,7 @@ export default function HomePage() {
     return (
         <PageContainer breadcrumbs={breadcrumbs} title={pageTitle}>
             {dataOrgDetail && (
-                <SimpleDialog
+                <GenerateLicenseModal
                     open={dialogOpen}
                     onClose={handleCloseDialog}
                     packageDetails={dataOrgPackageDetails}

@@ -19,7 +19,7 @@ jest.mock('@/hooks/useFetchApi')
 
 jest.mock('@/components/GenerateLicenseModal', () => ({
     __esModule: true,
-    SimpleDialog: () => <div data-testid="dialog">Mocked Dialog</div>,
+    GenerateLicenseModal: () => <div data-testid="dialog">Mocked Dialog</div>,
 }))
 
 describe('HomePage Component', () => {

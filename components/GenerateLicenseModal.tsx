@@ -34,7 +34,7 @@ export interface SimpleDialogProps {
     generatingError?: string | null;
 }
 
-export function SimpleDialog(props: SimpleDialogProps) {
+export function GenerateLicenseModal(props: SimpleDialogProps) {
     const {onClose, open} = props;
 
     const [selectedPackageDetail, setSelectedPackageDetail] = useState<number>(props.packageDetails[0].packageDetailsId);
