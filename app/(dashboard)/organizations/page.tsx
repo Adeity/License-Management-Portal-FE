@@ -8,7 +8,6 @@ import {HeadCell} from "@/types/HeadCell";
 import {useEffect, useState} from "react";
 import {Button} from "@mui/material";
 import {useRouter} from "next/navigation";
-import ReplayIcon from '@mui/icons-material/Replay';
 import {PageContainer} from "@toolpad/core/PageContainer";
 
 const tableHeadCells: readonly HeadCell[] = [
@@ -38,10 +37,6 @@ const tableHeadCells: readonly HeadCell[] = [
     },
 ];
 
-const getParentOrganization = (i) => {
-    return i.parentOrganization ? i.parentOrganization.name : ''
-}
-
 export default function OrganizationList() {
     // return (null)
     const [pageNumber, setPageNumber] = useState<number>(0);
@@ -49,7 +44,6 @@ export default function OrganizationList() {
     const [data, setData] = useState<PaginatedResponse<Organization> | null>(null)
     const [error, setError] = useState<string | null>(null);
     const [loading, setLoading] = useState(true)
-    const [refetch, setRefetch] = useState(false)
     const router = useRouter();
     useEffect(() => {
         setLoading(true)
@@ -59,15 +53,6 @@ export default function OrganizationList() {
         })
             .then((data) => {
                 const modifiedDataItems = []
-                // data.items.forEach(i => {
-                //     modifiedDataItems.push(
-                //         {
-                //             ...i,
-                //             parentOrganization: getParentOrganization(i)
-                //         }
-                //     )
-                // })
-                // data.items = modifiedDataItems;
                 setData(data);
                 setLoading(false)
             })
@@ -75,31 +60,23 @@ export default function OrganizationList() {
                 setError(error.message);
                 setLoading(false)
             })
-    }, [pageNumber, rowsPerPage, refetch]);
-    
-    const handleRefetch = () => {
-        setRefetch(!refetch)
-    }
+    }, [pageNumber, rowsPerPage]);
 
     return (
             <PageContainer >
                 {error && <Typography>Error: {error}</Typography>}
-                {!error && data &&
                     <div>
-                        <Button variant="text" onClick={handleRefetch}><ReplayIcon /></Button>
-                        <Button variant="contained" onClick={() => router.push("/organizations/create")}>Create</Button>
-                        {loading ? (<Typography>Loading...</Typography>) :
+                        <Button variant="contained" onClick={() => router.push("/organizations/create")} sx={{marginBottom: 2}}>Create</Button>
                             <PaginatedTable paginatedData={data}
                                             headCells={tableHeadCells}
                                             title={"Organizations"}
                                             rowsPerPage={rowsPerPage}
+                                            loading={loading}
                                             orgRedirectPath={"/organizations"}
                                             setPageNumber={setPageNumber}
                                             setRowsPerPage={setRowsPerPage}
                             />
-                        }
                     </div>
-                }
             </PageContainer>
     );
 }

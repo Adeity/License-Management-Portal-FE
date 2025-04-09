@@ -34,12 +34,12 @@ const NAVIGATION: ExtendedNavigation = [
     kind: 'header',
     title: 'Main items',
   },
-  {
-    segment: '',
-    title: 'Dashboard',
-    icon: <DashboardIcon />,
-    roles: ['Admin']
-  },
+  // {
+  //   segment: '',
+  //   title: 'Dashboard',
+  //   icon: <DashboardIcon />,
+  //   roles: ['Admin']
+  // },
   {
     segment: 'organizations',
     title: 'Organizations',

@@ -95,20 +95,36 @@ interface EnhancedTableProps {
   paginatedData: PaginatedResponse<any> | null;
   headCells: readonly HeadCell[];
   title: string;
-  orgRedirectPath: string;
+  orgRedirectPath?: string;
   rowsPerPage: number;
   setPageNumber: (pageNumber: number) => void;
   setRowsPerPage: (rowsPerPage: number) => void;
   loading: boolean;
   rowClickable?: boolean;
+  disablePagination?: boolean;
 }
+
 export default function PaginatedTable(props: EnhancedTableProps) {
   const router = useRouter();
-  const {paginatedData, headCells, title, rowsPerPage, setPageNumber, setRowsPerPage, orgRedirectPath, loading, rowClickable = true} = props
-  const rows = paginatedData?.items ?? [];
-  const totalItems = paginatedData?.totalItems ?? 0;
+  const {
+    paginatedData,
+    headCells,
+    title,
+    rowsPerPage,
+    setPageNumber,
+    setRowsPerPage,
+    orgRedirectPath = "",
+    loading,
+    rowClickable = true,
+    disablePagination = false,
+  } = props;
+
+  const allRows = paginatedData?.items ?? [];
+  const rows = disablePagination ? allRows : allRows.slice(0, rowsPerPage);
+  const totalItems = paginatedData?.totalItems ?? allRows.length;
   const pageNumber = paginatedData?.pageNumber ?? 1;
   const page = pageNumber - 1;
+
   const [order, setOrder] = React.useState<Order>('asc');
   const [orderBy, setOrderBy] = React.useState<string>('name');
   const [selected, setSelected] = React.useState<readonly number[]>([]);
@@ -199,16 +215,20 @@ export default function PaginatedTable(props: EnhancedTableProps) {
 
             </Table>
           </TableContainer>
-          <TablePagination
-              rowsPerPageOptions={[5, 10, 25]}
-              component="div"
-              count={totalItems}
-              rowsPerPage={rowsPerPage}
-              page={page}
-              onPageChange={handleChangePage}
-              onRowsPerPageChange={handleChangeRowsPerPage}
-              disabled={loading || !paginatedData}
-          />
+          {!disablePagination && (
+              <TablePagination
+                  rowsPerPageOptions={[5, 10, 25]}
+                  component="div"
+                  count={totalItems}
+                  rowsPerPage={rowsPerPage}
+                  page={page}
+                  onPageChange={handleChangePage}
+                  onRowsPerPageChange={handleChangeRowsPerPage}
+                  disabled={loading || !paginatedData}
+              />
+          )}
+
+
         </Paper>
         <FormControlLabel
             control={<Switch checked={dense} onChange={handleChangeDense} />}
