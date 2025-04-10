@@ -216,7 +216,6 @@ export default function HomePage() {
     };
 
 
-
     const handleCloseDialog = () => {
         setgenerateLicenseDialogOpen(false);
         if (generatingResult) {

@@ -14,11 +14,16 @@ import {
     Tab,
 } from "@mui/material";
 import * as React from "react";
-import { deleteOrganization, restoreOrganization } from "@/api/organizations";
+import {createOrganizationPackageDetails, deleteOrganization, restoreOrganization} from "@/api/organizations";
 import { PageContainer } from "@toolpad/core/PageContainer";
 import { useActivePage } from "@toolpad/core";
 import PaginatedTable from "@/components/PaginatedTable";
-import {HeadCell} from "@/types/HeadCell"; // Adjust path if needed
+import {HeadCell} from "@/types/HeadCell";
+import useFetchApi from "@/hooks/useFetchApi";
+import {getPackageDetails, getResellersOrganizations} from "@/api/resellers";
+import {getAllPackageDetails} from "@/api/packageDetails";
+import {moveLicensePost} from "@/api/licenses";
+import AssignPackageDetailModal from "@/components/AssignPackageDetailModal"; // Adjust path if needed
 
 // Define head cells for package details table
 const packageDetailsHeadCells: readonly HeadCell[] = [
@@ -49,6 +54,26 @@ export default function HomePage() {
     const activePage = useActivePage();
     const { data, error, loading, refetch } = useOrganizationById(params.id);
     const [tab, setTab] = React.useState(0);
+
+    const {data: dataPackageDetails, error: errorPackageDetails, loading: loadingPackageDetails} = useFetchApi(() => getAllPackageDetails())
+
+    const [assignDialogOpen, setAssignDialogOpen] = React.useState(false);
+
+    const handleAssignPackage = async (packageDetailsId: number, quantityOfLicenses: number) => {
+        const payload = {
+            PackageDetailsId: packageDetailsId,
+            OrganizationAccountId: data.id, // assuming `data` is org
+            QuantityOfLicenses: quantityOfLicenses
+        };
+
+        const res = await createOrganizationPackageDetails(payload.OrganizationAccountId, payload);
+
+        if (!res.ok) {
+            const result = await res.json();
+            throw new Error(result.message || "Failed to assign package");
+        }
+    };
+
 
     const handleDeleteClick = async () => {
         const res = await deleteOrganization(params.id);
@@ -123,8 +148,40 @@ export default function HomePage() {
             totalCount: data.organizationPackageDetails?.length ?? 0,
         };
 
+        const packageDataIds = paginatedPackageData.items.map((p) => {
+            return p.packageDetailsId
+        })
+        console.log('package data ids:', packageDataIds)
+
+        const filteredPackageDetails = dataPackageDetails.filter((p) => {
+            return !packageDataIds.includes(p.id)
+        });
+
         return (
-            <Box mt={2}>
+            <Box mt={0}>
+                <Button
+                    variant="contained"
+                    onClick={() => setAssignDialogOpen(true)}
+                    sx={{ mb: 2 }}
+                >
+                    Assign New Package
+                </Button>
+                <AssignPackageDetailModal
+                    open={assignDialogOpen}
+                    onClose={() => setAssignDialogOpen(false)}
+                    onAssign={handleAssignPackage}
+                    organizationName={data.name}
+                    packageDetails={dataPackageDetails ? filteredPackageDetails.map(p => {
+                        return {
+                            id: p.id,
+                            productNumber: p.productNumber,
+                            productName: p.productName,
+                            title: p.title
+                        }
+                    }) : null}
+                    loading={loadingPackageDetails}
+                />
+
                 <PaginatedTable
                     title="Package Details"
                     paginatedData={paginatedPackageData}

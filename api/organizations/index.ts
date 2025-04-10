@@ -43,6 +43,18 @@ export const createOrganization = async (data: any) => {
     })
 }
 
+
+export const createOrganizationPackageDetails = async (orgAccountId: number, data: any) => {
+    return await fetch(API_ROOT_URL + `/api/organizations/${orgAccountId}/organization-package-details`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+        credentials: "include"
+    })
+}
+
 export const updateOrganization = async (data: any) => {
     return await fetch(API_ROOT_URL + `/api/organizations/${data.id}`, {
         method: 'PUT',
