@@ -106,7 +106,7 @@ export function GenerateLicenseModal(props: SimpleDialogProps) {
                             // error={orgTypeValidationError !== ''}
                             // helperText={orgTypeValidationError}
                                    value={selectedPackageDetail}
-                            // onChange={onChangeType}
+                                   onChange={(e) => setSelectedPackageDetail(e.target.value)}
                         >
                             {props.packageDetails ?
                                 props.packageDetails?.map((option) => (
