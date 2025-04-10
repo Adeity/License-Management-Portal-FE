@@ -12,7 +12,7 @@ export const getOrganizationByReseller = async (pageNumber: number = 1, pageSize
         })
 }
 
-export const getAllOrganizations = async (pageNumber: number = 1, pageSize: number = 10) => {
+export const getAllOrganizationsPaginated = async (pageNumber: number = 1, pageSize: number = 10) => {
     return await fetch(API_ROOT_URL + `/api/organizations?pageNumber=${pageNumber}&pageSize=${pageSize}`, {
         method: 'GET',
         headers: {

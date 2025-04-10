@@ -11,8 +11,18 @@ export const getResellers = async () => {
         })
 }
 
-export const getResellersOrganizations = async (pageNumber: number = 1, pageSize: number = 10) => {
+export const getResellersOrganizationsPaginated = async (pageNumber: number = 1, pageSize: number = 10) => {
     return await fetch(API_ROOT_URL + `/api/resellers/organizations?pageNumber=${pageNumber}&pageSize=${pageSize}`, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        credentials: "include"
+    })
+}
+
+export const getResellersOrganizations = async () => {
+    return await fetch(API_ROOT_URL + `/api/resellers/organizations/all`, {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',

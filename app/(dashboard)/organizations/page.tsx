@@ -1,7 +1,7 @@
 "use client"
 import * as React from 'react';
 import Typography from '@mui/material/Typography';
-import {getAllOrganizations} from "@/api/organizations";
+import {getAllOrganizationsPaginated} from "@/api/organizations";
 import PaginatedTable from "@/components/PaginatedTable";
 import {PaginatedResponse} from "@/types/PaginatedResponse";
 import {HeadCell} from "@/types/HeadCell";
@@ -48,7 +48,7 @@ export default function OrganizationList() {
     useEffect(() => {
         setLoading(true)
         setError(null)
-        getAllOrganizations(pageNumber, rowsPerPage).then((res) => {
+        getAllOrganizationsPaginated(pageNumber, rowsPerPage).then((res) => {
             return res.json()
         })
             .then((data) => {

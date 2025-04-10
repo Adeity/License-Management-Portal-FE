@@ -1,7 +1,7 @@
 ﻿"use client"
 import * as React from 'react';
 import Typography from '@mui/material/Typography';
-import {getAllOrganizations} from "@/api/organizations";
+import {getAllOrganizationsPaginated} from "@/api/organizations";
 import PaginatedTable from "@/components/PaginatedTable";
 import {PaginatedResponse} from "@/types/PaginatedResponse";
 import {HeadCell} from "@/types/HeadCell";
@@ -10,7 +10,7 @@ import {Button} from "@mui/material";
 import {useRouter} from "next/navigation";
 import ReplayIcon from '@mui/icons-material/Replay';
 import {PageContainer} from "@toolpad/core/PageContainer";
-import {getResellersOrganizations} from "@/api/resellers";
+import {getResellersOrganizationsPaginated} from "@/api/resellers";
 
 const tableHeadCells: readonly HeadCell[] = [
     {
@@ -54,7 +54,7 @@ export default function OrganizationList() {
     useEffect(() => {
         setLoading(true)
         setError(null)
-        getResellersOrganizations(pageNumber, rowsPerPage).then((res) => {
+        getResellersOrganizationsPaginated(pageNumber, rowsPerPage).then((res) => {
             return res.json()
         })
             .then((data) => {

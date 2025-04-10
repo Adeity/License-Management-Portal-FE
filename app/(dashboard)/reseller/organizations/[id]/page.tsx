@@ -11,11 +11,14 @@ import {Stack} from "@mui/system";
 import {useEffect, useState} from "react";
 import PaginatedTable from "@/components/PaginatedTable";
 import {HeadCell} from "@/types/HeadCell";
-import {generateLicensePost, getLicensesByOrgId} from "@/api/licenses";
+import {generateLicensePost, getLicensesByOrgId, moveLicensePost} from "@/api/licenses";
 import {GenerateLicenseModal} from "@/components/GenerateLicenseModal";
 import useFetchApi from "@/hooks/useFetchApi";
-import {getPackageDetails} from "@/api/resellers";
+import {getPackageDetails, getResellersOrganizations} from "@/api/resellers";
 import {getOrganizationById} from "@/api/organizations";
+import MoreVertIcon from '@mui/icons-material/MoreVert';
+import { IconButton, Menu, MenuItem } from '@mui/material';
+import MoveLicenseModal from "@/components/MoveLicenseModal";
 
 const tableHeadCells: readonly HeadCell[] = [
     {
@@ -110,7 +113,7 @@ export default function HomePage() {
     const activePage = useActivePage();
     const params = useParams()
 
-    const [dialogOpen, setDialogOpen] = React.useState(false);
+    const [generateLicenseDialogOpen, setgenerateLicenseDialogOpen] = React.useState(false);
     const [generatingError, setGeneratingError] = useState<string | null>(null);
 
     const [pageNumber, setPageNumber] = useState<number>(0);
@@ -123,6 +126,50 @@ export default function HomePage() {
     const [generatingLicenseResultSuccess, setGeneratingLicenseResultSuccess] = React.useState(false);
     const [generatingResult, setGeneratingResult] = React.useState("");
 
+    const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+    const [selectedSerial, setSelectedSerial] = useState<string | null>(null);
+    const [moveDialogOpen, setMoveDialogOpen] = useState(false);
+    const [selectedLicenseId, setSelectedLicenseId] = useState<number | null>(null);
+
+
+    const openMenu = Boolean(anchorEl);
+    const handleMenuClick = (event: React.MouseEvent<HTMLElement>, serialNumber: string, id: number) => {
+        setAnchorEl(event.currentTarget);
+        setSelectedSerial(serialNumber);
+        setSelectedLicenseId(id);
+    };
+
+    const handleMenuClose = () => {
+        setAnchorEl(null);
+    };
+
+    const handleMoveClick = () => {
+        setMoveDialogOpen(true);
+        handleMenuClose();
+    };
+
+    const handleMoveLicense = async (targetOrgId: number) => {
+        if (!selectedLicenseId || !dataOrgDetail?.id) return;
+        try {
+            await moveLicensePost({
+                SerialNumberDetailId: selectedLicenseId,
+                SourceOrganizationAccountId: dataOrgDetail.id,
+                TargetOrganizationAccountId: targetOrgId
+            });
+            refetchLicenses();
+        } catch (e) {
+            console.error("Failed to move license", e);
+        }
+    };
+
+    const renderRowActions = (row: any) => (
+        <>
+            <IconButton onClick={(e) => handleMenuClick(e, row.serial_Number, row.id)}>
+                <MoreVertIcon />
+            </IconButton>
+        </>
+    );
+
     const {data: dataOrgDetail, error: errorOrgDetail, loading: loadingOrgDetail} = useFetchApi(() => getOrganizationById(params.id))
     const {
         data: dataLicenses,
@@ -131,13 +178,14 @@ export default function HomePage() {
         refetch: refetchLicenses
     } = useFetchApi(() => getLicensesByOrgId(params.id, pageNumber, rowsPerPage), [pageNumber, rowsPerPage]);
     const {data: dataOrgPackageDetails, error: errorOrgPackageDetails, loading: loadingOrgPackageDetails} = useFetchApi(getPackageDetails)
+    const {data: dataAllOrganizations, error: errorAllOrganizations, loading: loadingAllOrganizations} = useFetchApi(() => getResellersOrganizations())
 
     useEffect(() => {
         refetchLicenses()
     },[pageNumber, rowsPerPage])
 
     const handleClickOpen = () => {
-        setDialogOpen(true);
+        setgenerateLicenseDialogOpen(true);
     };
 
     const generateLicense = async (packageDetailsId: number, quantityOfLicenses: number = 1) => {
@@ -170,7 +218,7 @@ export default function HomePage() {
 
 
     const handleCloseDialog = () => {
-        setDialogOpen(false);
+        setgenerateLicenseDialogOpen(false);
         if (generatingResult) {
             refetchLicenses(); // <- this will refresh the license table
         }
@@ -197,7 +245,7 @@ export default function HomePage() {
         <PageContainer breadcrumbs={breadcrumbs} title={pageTitle}>
             {(dataOrgDetail && dataOrgPackageDetails) && (
                 <GenerateLicenseModal
-                    open={dialogOpen}
+                    open={generateLicenseDialogOpen}
                     onClose={handleCloseDialog}
                     packageDetails={dataOrgPackageDetails}
                     organizationAccountName={dataOrgDetail.name}
@@ -267,7 +315,7 @@ export default function HomePage() {
                     : (
                     <Button
                         variant={'contained'}
-                        onClick={() => setDialogOpen(true)}
+                        onClick={() => setgenerateLicenseDialogOpen(true)}
                         sx={{ marginBottom: 1 }}>
                         Create new license
                     </Button>
@@ -282,9 +330,22 @@ export default function HomePage() {
                     setPageNumber={setPageNumber}
                     setRowsPerPage={setRowsPerPage}
                     rowClickable={false}
+                    renderRowActions={renderRowActions}
                 />
+                {/* table Actions menu */ }
+                <Menu anchorEl={anchorEl} open={openMenu} onClose={handleMenuClose}>
+                    <MenuItem onClick={handleMoveClick}>Move</MenuItem>
+                </Menu>
             </CustomTabPanel>
 
+            <MoveLicenseModal
+                open={moveDialogOpen}
+                onClose={() => setMoveDialogOpen(false)}
+                sourceOrganization={dataOrgDetail ? {name: dataOrgDetail.name, id: dataOrgDetail.id}: null}
+                targetOrganizations={dataAllOrganizations}
+                onMove={handleMoveLicense}
+                serialNumber={selectedSerial || ""}
+            />
         </PageContainer>
     );
 }

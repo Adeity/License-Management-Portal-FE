@@ -20,3 +20,14 @@ export const generateLicensePost = async (payload) => {
         credentials: "include"
     })
 }
+
+export const moveLicensePost = async (payload) => {
+    return await fetch(API_ROOT_URL + `/api/licenses/move`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(payload),
+        credentials: "include"
+    })
+}

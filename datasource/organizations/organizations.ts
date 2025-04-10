@@ -2,7 +2,7 @@
 import {
     createOrganization,
     deleteOrganization,
-    getAllOrganizations,
+    getAllOrganizationsPaginated,
     getOrganizationById,
     updateOrganization
 } from "@/api/organizations";
@@ -35,7 +35,7 @@ export const organizationsDataSource: DataSource<Organization> = {
     ],
     getMany: ({ paginationModel, filterModel, sortModel }) => {
         return new Promise<{ items: Organization[]; itemCount: number }>(async (resolve) => {
-            let processedorganizations = await getAllOrganizations(paginationModel.page, paginationModel.pageSize)
+            let processedorganizations = await getAllOrganizationsPaginated(paginationModel.page, paginationModel.pageSize)
             const json = await processedorganizations.json()
 
             const newItems = []

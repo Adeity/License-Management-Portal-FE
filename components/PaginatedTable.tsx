@@ -28,10 +28,11 @@ interface EnhancedTableHeadProps {
   orderBy: string;
   rowCount: number;
   headCells: readonly HeadCell[];
+  actions: boolean;
 }
 
 function EnhancedTableHead(props: EnhancedTableHeadProps) {
-  const { onSelectAllClick, order, orderBy, numSelected, rowCount, headCells } =
+  const { onSelectAllClick, order, orderBy, numSelected, rowCount, headCells, actions } =
       props;
 
   return (
@@ -46,6 +47,12 @@ function EnhancedTableHead(props: EnhancedTableHeadProps) {
                 {headCell.label}
               </TableCell>
           ))}
+          {actions &&
+          <TableCell
+            >
+            Actions
+          </TableCell>
+          }
         </TableRow>
       </TableHead>
   );
@@ -102,6 +109,7 @@ interface EnhancedTableProps {
   loading: boolean;
   rowClickable?: boolean;
   disablePagination?: boolean;
+  renderRowActions?: (row: any) => React.ReactNode
 }
 
 export default function PaginatedTable(props: EnhancedTableProps) {
@@ -117,6 +125,7 @@ export default function PaginatedTable(props: EnhancedTableProps) {
     loading,
     rowClickable = true,
     disablePagination = false,
+    renderRowActions
   } = props;
 
   const allRows = paginatedData?.items ?? [];
@@ -173,6 +182,7 @@ export default function PaginatedTable(props: EnhancedTableProps) {
                   onSelectAllClick={handleSelectAllClick}
                   rowCount={rows.length}
                   headCells={headCells}
+                  actions={renderRowActions}
               />
               <TableBody>
                 {loading || !paginatedData ? (
@@ -207,6 +217,12 @@ export default function PaginatedTable(props: EnhancedTableProps) {
                                   {row[headCell.id]}
                                 </TableCell>
                             ))}
+
+                            {renderRowActions &&
+                                <TableCell align="right">
+                                  {props.renderRowActions?.(row)}
+                                </TableCell>
+                            }
                           </TableRow>
                       );
                     })
