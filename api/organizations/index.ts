@@ -55,6 +55,16 @@ export const createOrganizationPackageDetails = async (orgAccountId: number, dat
     })
 }
 
+export const deleteOrganizationPackageDetails = async (orgAccountId: number, orgPackageDetailsId: number) => {
+    return await fetch(API_ROOT_URL + `/api/organizations/${orgAccountId}/organization-package-details/${orgPackageDetailsId}`, {
+        method: 'DELETE',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        credentials: "include"
+    })
+}
+
 export const updateOrganization = async (data: any) => {
     return await fetch(API_ROOT_URL + `/api/organizations/${data.id}`, {
         method: 'PUT',

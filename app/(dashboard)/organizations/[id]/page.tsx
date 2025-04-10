@@ -13,8 +13,15 @@ import {
     Tabs,
     Tab,
 } from "@mui/material";
+import MoreVertIcon from '@mui/icons-material/MoreVert';
+import { IconButton, Menu, MenuItem, Dialog, DialogTitle, DialogContent, DialogActions } from '@mui/material';
 import * as React from "react";
-import {createOrganizationPackageDetails, deleteOrganization, restoreOrganization} from "@/api/organizations";
+import {
+    createOrganizationPackageDetails,
+    deleteOrganization,
+    deleteOrganizationPackageDetails,
+    restoreOrganization
+} from "@/api/organizations";
 import { PageContainer } from "@toolpad/core/PageContainer";
 import { useActivePage } from "@toolpad/core";
 import PaginatedTable from "@/components/PaginatedTable";
@@ -23,7 +30,8 @@ import useFetchApi from "@/hooks/useFetchApi";
 import {getPackageDetails, getResellersOrganizations} from "@/api/resellers";
 import {getAllPackageDetails} from "@/api/packageDetails";
 import {moveLicensePost} from "@/api/licenses";
-import AssignPackageDetailModal from "@/components/AssignPackageDetailModal"; // Adjust path if needed
+import AssignPackageDetailModal from "@/components/AssignPackageDetailModal";
+import {useState} from "react"; // Adjust path if needed
 
 // Define head cells for package details table
 const packageDetailsHeadCells: readonly HeadCell[] = [
@@ -54,10 +62,49 @@ export default function HomePage() {
     const activePage = useActivePage();
     const { data, error, loading, refetch } = useOrganizationById(params.id);
     const [tab, setTab] = React.useState(0);
+    const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+    const [selectedPackageDetailId, setSelectedPackageDetailId] = useState<number | null>(null);
+    const [confirmDeleteOpen, setConfirmDeleteOpen] = useState(false);
+
 
     const {data: dataPackageDetails, error: errorPackageDetails, loading: loadingPackageDetails} = useFetchApi(() => getAllPackageDetails())
 
     const [assignDialogOpen, setAssignDialogOpen] = React.useState(false);
+
+    const handleAssignDialogClose = () => {
+        setAssignDialogOpen(false)
+        refetch()
+    }
+
+    const openMenu = Boolean(anchorEl);
+
+    const handleMenuClick = (event: React.MouseEvent<HTMLElement>, packageDetailId: number) => {
+        setAnchorEl(event.currentTarget);
+        setSelectedPackageDetailId(packageDetailId);
+    };
+
+    const handleMenuClose = () => {
+        setAnchorEl(null);
+    };
+
+    const handleDeletePackageDetails = () => {
+        setConfirmDeleteOpen(true);
+        handleMenuClose();
+    };
+
+    const handleConfirmDelete = async (e) => {
+        console.log('e.targetvalue', e.target.value)
+        if (!selectedPackageDetailId || !data?.id) return;
+        try {
+            await deleteOrganizationPackageDetails(data.id, selectedPackageDetailId);
+            setConfirmDeleteOpen(false);
+            setSelectedPackageDetailId(null);
+            refetch();
+        } catch (e) {
+            console.error("Failed to delete package detail", e);
+        }
+    };
+
 
     const handleAssignPackage = async (packageDetailsId: number, quantityOfLicenses: number) => {
         const payload = {
@@ -75,7 +122,7 @@ export default function HomePage() {
     };
 
 
-    const handleDeleteClick = async () => {
+    const handleDeleteOrganizationClick = async () => {
         const res = await deleteOrganization(params.id);
         if (res.ok) refetch();
     };
@@ -134,7 +181,7 @@ export default function HomePage() {
                         Restore
                     </Button>
                 ) : (
-                    <Button variant="contained" color="error" onClick={handleDeleteClick}>
+                    <Button variant="contained" color="error" onClick={handleDeleteOrganizationClick}>
                         Delete
                     </Button>
                 )}
@@ -147,11 +194,15 @@ export default function HomePage() {
             items: data.organizationPackageDetails ?? [],
             totalCount: data.organizationPackageDetails?.length ?? 0,
         };
+        const renderRowActions = (row: any) => (
+            <IconButton onClick={(e) => handleMenuClick(e, row.id)}>
+                <MoreVertIcon />
+            </IconButton>
+        );
 
         const packageDataIds = paginatedPackageData.items.map((p) => {
             return p.packageDetailsId
         })
-        console.log('package data ids:', packageDataIds)
 
         const filteredPackageDetails = dataPackageDetails.filter((p) => {
             return !packageDataIds.includes(p.id)
@@ -159,6 +210,21 @@ export default function HomePage() {
 
         return (
             <Box mt={0}>
+                <Menu anchorEl={anchorEl} open={openMenu} onClose={handleMenuClose}>
+                    <MenuItem onClick={handleDeletePackageDetails}>Delete</MenuItem>
+                </Menu>
+
+                <Dialog open={confirmDeleteOpen} onClose={() => setConfirmDeleteOpen(false)}>
+                    <DialogTitle>Confirm Deletion</DialogTitle>
+                    <DialogContent>
+                        Are you sure you want to remove this package detail from the organization?
+                    </DialogContent>
+                    <DialogActions>
+                        <Button onClick={() => setConfirmDeleteOpen(false)}>Cancel</Button>
+                        <Button onClick={(e)=>handleConfirmDelete(e)} variant="contained" color="error">Delete</Button>
+                    </DialogActions>
+                </Dialog>
+
                 <Button
                     variant="contained"
                     onClick={() => setAssignDialogOpen(true)}
@@ -168,7 +234,7 @@ export default function HomePage() {
                 </Button>
                 <AssignPackageDetailModal
                     open={assignDialogOpen}
-                    onClose={() => setAssignDialogOpen(false)}
+                    onClose={() => handleAssignDialogClose()}
                     onAssign={handleAssignPackage}
                     organizationName={data.name}
                     packageDetails={dataPackageDetails ? filteredPackageDetails.map(p => {
@@ -181,7 +247,6 @@ export default function HomePage() {
                     }) : null}
                     loading={loadingPackageDetails}
                 />
-
                 <PaginatedTable
                     title="Package Details"
                     paginatedData={paginatedPackageData}
@@ -193,7 +258,9 @@ export default function HomePage() {
                     setRowsPerPage={() => {}}
                     rowClickable={false}
                     disablePagination={true}
+                    renderRowActions={renderRowActions}
                 />
+
             </Box>
         );
     };
