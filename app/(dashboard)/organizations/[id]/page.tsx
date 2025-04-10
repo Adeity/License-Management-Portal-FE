@@ -27,9 +27,7 @@ import { useActivePage } from "@toolpad/core";
 import PaginatedTable from "@/components/PaginatedTable";
 import {HeadCell} from "@/types/HeadCell";
 import useFetchApi from "@/hooks/useFetchApi";
-import {getPackageDetails, getResellersOrganizations} from "@/api/resellers";
 import {getAllPackageDetails} from "@/api/packageDetails";
-import {moveLicensePost} from "@/api/licenses";
 import AssignPackageDetailModal from "@/components/AssignPackageDetailModal";
 import {useState} from "react"; // Adjust path if needed
 
@@ -65,6 +63,9 @@ export default function HomePage() {
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
     const [selectedPackageDetailId, setSelectedPackageDetailId] = useState<number | null>(null);
     const [confirmDeleteOpen, setConfirmDeleteOpen] = useState(false);
+    const [deleting, setDeletingPackage] = useState(false);
+    const [deleteSuccess, setDeletePackageSuccess] = useState(false);
+    const [deleteError, setDeletePackageError] = useState<string | null>(null);
 
 
     const {data: dataPackageDetails, error: errorPackageDetails, loading: loadingPackageDetails} = useFetchApi(() => getAllPackageDetails())
@@ -92,18 +93,23 @@ export default function HomePage() {
         handleMenuClose();
     };
 
-    const handleConfirmDelete = async (e) => {
-        console.log('e.targetvalue', e.target.value)
+    const handleConfirmDelete = async () => {
         if (!selectedPackageDetailId || !data?.id) return;
+        setDeletingPackage(true);
+        setDeletePackageError(null);
+        setDeletePackageSuccess(false);
         try {
             await deleteOrganizationPackageDetails(data.id, selectedPackageDetailId);
-            setConfirmDeleteOpen(false);
+            setDeletePackageSuccess(true);
             setSelectedPackageDetailId(null);
-            refetch();
-        } catch (e) {
+        } catch (e: any) {
             console.error("Failed to delete package detail", e);
+            setDeletePackageError(e.message || "Unexpected error");
+        } finally {
+            setDeletingPackage(false);
         }
     };
+
 
 
     const handleAssignPackage = async (packageDetailsId: number, quantityOfLicenses: number) => {
@@ -214,16 +220,54 @@ export default function HomePage() {
                     <MenuItem onClick={handleDeletePackageDetails}>Delete</MenuItem>
                 </Menu>
 
-                <Dialog open={confirmDeleteOpen} onClose={() => setConfirmDeleteOpen(false)}>
+                <Dialog open={confirmDeleteOpen} onClose={() => {
+                    if (!deleting && !deleteSuccess) setConfirmDeleteOpen(false);
+                }}>
                     <DialogTitle>Confirm Deletion</DialogTitle>
                     <DialogContent>
-                        Are you sure you want to remove this package detail from the organization?
+                        {deleting ? (
+                            <Stack alignItems="center" spacing={2} sx={{ py: 2 }}>
+                                <Typography>Deleting package detail...</Typography>
+                            </Stack>
+                        ) : deleteSuccess ? (
+                            <Stack alignItems="center" spacing={2} sx={{ py: 2 }}>
+                                <Typography variant="h6" color="success.main">✅ Package detail deleted successfully</Typography>
+                            </Stack>
+                        ) : deleteError ? (
+                            <Stack alignItems="center" spacing={2} sx={{ py: 2 }}>
+                                <Typography variant="h6" color="error">❌ Failed to delete package detail</Typography>
+                                <Typography variant="body2" color="text.secondary">{deleteError}</Typography>
+                            </Stack>
+                        ) : (
+                            <Typography>
+                                Are you sure you want to remove this package detail from the organization?
+                            </Typography>
+                        )}
                     </DialogContent>
-                    <DialogActions>
-                        <Button onClick={() => setConfirmDeleteOpen(false)}>Cancel</Button>
-                        <Button onClick={(e)=>handleConfirmDelete(e)} variant="contained" color="error">Delete</Button>
-                    </DialogActions>
+                    {!deleting && !deleteSuccess && !deleteError && (
+                        <DialogActions>
+                            <Button onClick={() => setConfirmDeleteOpen(false)}>Cancel</Button>
+                            <Button
+                                onClick={handleConfirmDelete}
+                                variant="contained"
+                                color="error"
+                            >
+                                Delete
+                            </Button>
+                        </DialogActions>
+                    )}
+                    {(deleteSuccess || deleteError) && (
+                        <DialogActions>
+                            <Button onClick={() => {
+                                setConfirmDeleteOpen(false);
+                                setDeletePackageError(null);
+                                setDeletePackageSuccess(false);
+                                refetch();
+                            }}>Close</Button>
+                        </DialogActions>
+                    )}
                 </Dialog>
+
 
                 <Button
                     variant="contained"
