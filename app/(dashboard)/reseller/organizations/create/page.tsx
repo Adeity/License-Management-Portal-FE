@@ -8,7 +8,7 @@ import { PageContainer } from "@toolpad/core/PageContainer";
 import { useActivePage } from "@toolpad/core";
 import useFetchApi from "@/hooks/useFetchApi";
 import { createOrganization } from "@/api/organizations";
-import { getLoggedResellerInfo } from "@/api/resellers";
+import { getLoggedResellerInfo } from "@/api/reseller";
 import {OrganizationType} from "@/enums/OrganizationType";
 
 export default function CreateOrganizationPage() {

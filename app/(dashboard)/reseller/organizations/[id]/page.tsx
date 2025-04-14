@@ -14,7 +14,7 @@ import {HeadCell} from "@/types/HeadCell";
 import {generateLicensePost, getLicensesByOrgId, moveLicensePost} from "@/api/licenses";
 import {GenerateLicenseModal} from "@/components/GenerateLicenseModal";
 import useFetchApi from "@/hooks/useFetchApi";
-import {getPackageDetails, getResellersOrganizations} from "@/api/resellers";
+import {getPackageDetails, getResellersOrganizations} from "@/api/reseller";
 import {getOrganizationById} from "@/api/organizations";
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import { IconButton, Menu, MenuItem } from '@mui/material';

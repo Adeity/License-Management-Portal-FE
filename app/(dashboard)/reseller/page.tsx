@@ -10,7 +10,7 @@ import {Button} from "@mui/material";
 import {useRouter} from "next/navigation";
 import ReplayIcon from '@mui/icons-material/Replay';
 import {PageContainer} from "@toolpad/core/PageContainer";
-import {getResellersOrganizationsPaginated} from "@/api/resellers";
+import {getResellersOrganizationsPaginated} from "@/api/reseller";
 
 const tableHeadCells: readonly HeadCell[] = [
     {
