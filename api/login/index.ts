@@ -12,7 +12,7 @@ export const loginPost = async (email: string, password: string) => {
 }
 
 export const checkUserInfo = async () => {
-    return await fetch(API_ROOT_URL + `/api/auth/userinfo`, {
+    return await fetch(API_ROOT_URL + `/api/auth/user-info`, {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',
