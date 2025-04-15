@@ -1,6 +1,6 @@
 ﻿import {useEffect, useState} from "react";
 import {getOrganizationById} from "@/api/organizations";
-import {getLicensesByOrgId} from "@/api/licenses";
+import {getLicensesByOrgId} from "../api/organizations";
 
 const getResellersHook = (id, pageIndex, pageSize) => {
     const [data, setData] = useState(null);

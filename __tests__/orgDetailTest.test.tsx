@@ -102,7 +102,7 @@ describe('HomePage Component', () => {
         const detailTabPanel = screen.getByTestId("tab-panel-0", { hidden: true })
         const licenseTabPanel = screen.getByTestId("tab-panel-1", { hidden: true })
 
-        // Click licenses tab
+        // Click licenseActions tab
         await fireEvent.click(licenseTabButton)
 
         // It should be selected now
@@ -116,7 +116,7 @@ describe('HomePage Component', () => {
         expect(licenseTabPanel).toHaveAttribute('hidden')
     })
 
-    it('shows "Create new license" button when org and package details are loaded but licenses are still loading', async () => {
+    it('shows "Create new license" button when org and package details are loaded but licenseActions are still loading', async () => {
         mockUseFetchApi.mockImplementation((fetchFn: any) => {
             const name = fetchFn.toString();
 

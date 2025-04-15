@@ -12,6 +12,16 @@ export const getOrganizationByReseller = async (pageNumber: number = 1, pageSize
         })
 }
 
+export const getLicensesByOrgId = async (id, pageIndex, pageSize) => {
+    return await fetch(API_ROOT_URL + `/api/organizations/${id}/licenses?pageNumber=${pageIndex}&pageSize=${pageSize}`, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        credentials: "include"
+    })
+}
+
 export const getAllOrganizationsPaginated = async (pageNumber: number = 1, pageSize: number = 10) => {
     return await fetch(API_ROOT_URL + `/api/organizations?pageNumber=${pageNumber}&pageSize=${pageSize}`, {
         method: 'GET',
@@ -77,8 +87,9 @@ export const updateOrganization = async (data: any) => {
 }
 
 export const deleteOrganization = async (id: any) => {
-    return await fetch(API_ROOT_URL + `/api/organizations/${id}`, {
-        method: 'DELETE',
+    return await fetch(API_ROOT_URL + `/api/organizations/${id}/is-deleted`, {
+        method: 'PATCH',
+        body: JSON.stringify({isDeleted: true}),
         headers: {
             'Content-Type': 'application/json',
         },
@@ -87,8 +98,9 @@ export const deleteOrganization = async (id: any) => {
 }
 
 export const restoreOrganization = async (id: any) => {
-    return await fetch(API_ROOT_URL + `/api/organizations/${id}/restore`, {
-        method: 'PUT',
+    return await fetch(API_ROOT_URL + `/api/organizations/${id}/is-deleted`, {
+        method: 'PATCH',
+        body: JSON.stringify({isDeleted: false}),
         headers: {
             'Content-Type': 'application/json',
         },
