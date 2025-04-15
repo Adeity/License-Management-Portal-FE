@@ -15,6 +15,17 @@ import { Crud, DataModel, DataSource, DataSourceCache } from '@toolpad/core/Crud
 import {DashboardLayout} from "@toolpad/core/DashboardLayout";
 import {Organization, organizationsDataSource} from "@/datasource/organizations/organizations";
 
+import { useMediaQuery, useTheme } from '@mui/material';
+
+// Responsive title component
+function BrandingTitle() {
+  const theme = useTheme();
+  const isSmallScreen = useMediaQuery(theme.breakpoints.down('sm'));
+
+  return <>{isSmallScreen ? 'LMP' : 'License Management Portal'}</>;
+}
+
+
 // New attribute to add
 interface ExtendedAttribute {
   roles?: string[];
@@ -51,7 +62,7 @@ const NAVIGATION: ExtendedNavigation = [
 ];
 
 const BRANDING = {
-  title: 'License Management Portal',
+  title: <BrandingTitle />,
   logo: <span className={'hide-icon'}></span>,
 };
 
