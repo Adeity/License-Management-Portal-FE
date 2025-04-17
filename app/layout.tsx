@@ -22,7 +22,7 @@ function BrandingTitle() {
   const theme = useTheme();
   const isSmallScreen = useMediaQuery(theme.breakpoints.down('sm'));
 
-  return <>{isSmallScreen ? 'LMP' : 'License Management Portal'}</>;
+  return "LMP";
 }
 
 
