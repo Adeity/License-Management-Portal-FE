@@ -178,7 +178,7 @@ export default function HomePage() {
         loading: loadingLicense,
         refetch: refetchLicenses
     } = useFetchApi(() => getLicensesByOrgId(params.id, pageNumber, rowsPerPage), [pageNumber, rowsPerPage]);
-    const {data: dataOrgPackageDetails, error: errorOrgPackageDetails, loading: loadingOrgPackageDetails} = useFetchApi(getPackageDetails)
+    const {data: dataOrgPackageDetails, error: errorOrgPackageDetails, loading: loadingOrgPackageDetails, refetch: refetchPackageDetails} = useFetchApi(getPackageDetails)
     const {data: dataAllOrganizations, error: errorAllOrganizations, loading: loadingAllOrganizations} = useFetchApi(() => getResellersOrganizations())
 
     useEffect(() => {
@@ -221,6 +221,7 @@ export default function HomePage() {
         setgenerateLicenseDialogOpen(false);
         if (generatingResult) {
             refetchLicenses(); // <- this will refresh the license table
+            refetchPackageDetails()
         }
         setGeneratingResult("");
         setGeneratingError(null);
