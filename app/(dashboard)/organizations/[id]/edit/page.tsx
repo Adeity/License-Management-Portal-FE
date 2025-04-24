@@ -18,7 +18,7 @@ import getResellersHook from "@/hooks/getResellersHook";
 import { useState, useEffect } from "react";
 import { createOrganization, updateOrganization } from "@/api/organizations";
 import { useActivePage } from "@toolpad/core";
-import { PageContainer } from "@toolpad/core/PageContainer";
+import {Breadcrumb, PageContainer} from "@toolpad/core/PageContainer";
 
 export default function HomePage() {
     const params = useParams();
@@ -136,27 +136,21 @@ export default function HomePage() {
 
     const pageTitle = `Edit: ${data.name}`;
     const breadcrumbTitle = `${params.id}`;
-    const path = `${activePage.path}/${params.id}`;
-    const editPath = `${path}/edit`;
-    const breadcrumbs = [
-        ...activePage.breadcrumbs,
-        { title: breadcrumbTitle, path },
-        { title: "Edit", path: editPath },
-    ];
+    let breadcrumbs: Breadcrumb[] = [{title: "loading...", path: "/"}];
+    if (activePage) {
+        const path = `${activePage.path}/${params.id}`;
+        const editPath = `${path}/edit`;
+        breadcrumbs = [
+            ...activePage.breadcrumbs,
+            { title: breadcrumbTitle, path },
+            { title: "Edit", path: editPath },
+        ];
+    }
 
     return (
         <PageContainer breadcrumbs={breadcrumbs} title={pageTitle}>
             <Stack spacing={3}>
                 <Grid container spacing={2}>
-                    <Grid item xs={12} md={6}>
-                        <TextField
-                            fullWidth
-                            label="Id"
-                            variant="outlined"
-                            defaultValue={data.id}
-                            InputProps={{ readOnly: true }}
-                        />
-                    </Grid>
                     <Grid item xs={12} md={6}>
                         <TextField
                             fullWidth

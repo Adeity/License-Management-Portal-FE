@@ -10,12 +10,12 @@ import {
     Typography,
     Skeleton,
 } from "@mui/material";
-import { useState } from "react";
+import {Suspense, useState} from "react";
 import useAvailableOrganizationTypes from "@/hooks/availableOrganizationTypesHook";
 import getResellersHook from "@/hooks/getResellersHook";
 import { createOrganization } from "@/api/organizations";
 import { useRouter } from "next/navigation";
-import { PageContainer } from "@toolpad/core/PageContainer";
+import {Breadcrumb, PageContainer} from "@toolpad/core/PageContainer";
 import { useActivePage } from "@toolpad/core";
 
 export default function CreateOrganizationPage() {
@@ -88,11 +88,15 @@ export default function CreateOrganizationPage() {
     };
 
     const breadcrumbTitle = `Create`;
-    const path = `${activePage.path}/create`;
-    const breadcrumbs = [...activePage.breadcrumbs, { title: breadcrumbTitle, path }];
+    let breadcrumbs: Breadcrumb[] = [{title: "loading...", path: "/"}];
+    if (activePage) {
+        const path = `${activePage.path}/create`;
+        breadcrumbs = [...activePage.breadcrumbs, { title: breadcrumbTitle, path }];
+    }
 
     return (
         <PageContainer title="Create New Organization" breadcrumbs={breadcrumbs}>
+
             {loadingTypes || loadingResellers ? (
                 <Stack spacing={3}>
                     <Skeleton variant="text" width="40%" height={40} />

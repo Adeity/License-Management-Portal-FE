@@ -1,6 +1,7 @@
 ﻿"use client"
 
-import { Alert, Button, Skeleton, TextField } from "@mui/material";
+import { Button, Skeleton, TextField } from "@mui/material";
+import Alert from '@mui/material/Alert';
 import Box from "@mui/material/Box";
 import { useState } from "react";
 import { useRouter } from "next/navigation";

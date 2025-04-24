@@ -5,6 +5,7 @@ import {PageContainer} from "@toolpad/core/PageContainer";
 import {useActivePage} from "@toolpad/core";
 import {useParams} from "next/navigation";
 import Box from "@mui/material/Box";
+import {Grid} from "@mui/material";
 import {Button, Skeleton, Tab, Tabs, TextField} from "@mui/material";
 import useOrganizationById from "@/hooks/useOrganizationById";
 import {Stack} from "@mui/system";
@@ -233,7 +234,6 @@ export default function HomePage() {
         setOpenedTabValue(newValue);
     };
 
-    console.log('loadingOrgDetail', loadingOrgDetail, dataOrgDetail)
     const pageTitle = loadingOrgDetail ? "Loading..." : dataOrgDetail.name;
     const breadcrumbTitle = `${params.id}`;
     const path = `/reseller/organizations/${params.id}`
@@ -269,40 +269,44 @@ export default function HomePage() {
                 loading={loadingOrgDetail || loadingOrgPackageDetails}
                 skeleton={<SkeletonForm />}>
                 {dataOrgDetail && (
-                    <Stack>
-                        <TextField
-                            helperText=""
-                            label="Id"
-                            variant="outlined"
-                            defaultValue={dataOrgDetail.id}
-                            sx={{ paddingY: '1rem' }}
-                            slotProps={{ input: { readOnly: true } }}
-                        />
-                        <TextField
-                            helperText=""
-                            label="Name"
-                            variant="outlined"
-                            defaultValue={dataOrgDetail.name}
-                            sx={{ paddingY: '1rem' }}
-                            slotProps={{ input: { readOnly: true } }}
-                        />
-                        <TextField
-                            helperText=""
-                            label="Type"
-                            variant="outlined"
-                            defaultValue={dataOrgDetail.organizationType}
-                            sx={{ paddingY: '1rem' }}
-                            slotProps={{ input: { readOnly: true } }}
-                        />
-                        <TextField
-                            helperText=""
-                            label="Parent Organization"
-                            variant="outlined"
-                            defaultValue={dataOrgDetail.parentOrganization || 'Null'}
-                            sx={{ paddingY: '1rem' }}
-                            slotProps={{ input: { readOnly: true } }}
-                        />
-                    </Stack>
+                    <Grid container spacing={2}>
+                        <Grid item xs={12} md={6}>
+                            <Grid item xs={4}>
+                                <Typography color="textSecondary">ID:</Typography>
+                            </Grid>
+                            <Grid item xs={8}>
+                                <Typography>{dataOrgDetail.id}</Typography>
+                            </Grid>
+                        </Grid>
+
+                        <Grid item xs={12} md={6}>
+                            <Grid item xs={4}>
+                                <Typography color="textSecondary">Name:</Typography>
+                            </Grid>
+                            <Grid item xs={8}>
+                                <Typography>{dataOrgDetail.name}</Typography>
+                            </Grid>
+                        </Grid>
+
+                        <Grid item xs={12} md={6}>
+                            <Grid item xs={4}>
+                                <Typography color="textSecondary">Type:</Typography>
+                            </Grid>
+                            <Grid item xs={8}>
+                                <Typography>{dataOrgDetail.organizationType}</Typography>
+                            </Grid>
+                        </Grid>
+
+                        <Grid item xs={12} md={6}>
+                            <Grid item xs={4}>
+                                <Typography color="textSecondary">Parent Organization:</Typography>
+                            </Grid>
+                            <Grid item xs={8}>
+                                <Typography>{dataOrgDetail.parentOrganization || 'Null'}</Typography>
+                            </Grid>
+                        </Grid>
+                    </Grid>
+
                 )}
             </CustomTabPanel>
 

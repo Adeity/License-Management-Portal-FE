@@ -27,7 +27,7 @@ export default function HomePage() {
                         const userData = {user: json}
                         localStorage.setItem('user', JSON.stringify(userData));
                         setCustomSession(userData)
-                        resolve()
+                        resolve({})
                         router.push('/')
                     }
                 })

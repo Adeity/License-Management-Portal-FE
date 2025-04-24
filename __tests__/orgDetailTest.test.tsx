@@ -12,11 +12,6 @@ jest.mock('next/navigation', () => ({
 
 jest.mock('@/hooks/useFetchApi')
 
-// jest.mock('@/components/PaginatedTable', () => ({
-//     __esModule: true,
-//     default: () => <div data-testid="enhanced-table">Mocked Table</div>,
-// }))
-
 jest.mock('@/components/GenerateLicenseModal', () => ({
     __esModule: true,
     GenerateLicenseModal: () => <div data-testid="dialog">Mocked Dialog</div>,
