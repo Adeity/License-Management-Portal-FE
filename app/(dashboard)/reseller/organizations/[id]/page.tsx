@@ -234,7 +234,6 @@ export default function HomePage() {
         setOpenedTabValue(newValue);
     };
 
-    console.log('loadingOrgDetail', loadingOrgDetail, dataOrgDetail)
     const pageTitle = loadingOrgDetail ? "Loading..." : dataOrgDetail.name;
     const breadcrumbTitle = `${params.id}`;
     const path = `/reseller/organizations/${params.id}`

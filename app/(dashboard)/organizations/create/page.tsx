@@ -19,7 +19,7 @@ import {Breadcrumb, PageContainer} from "@toolpad/core/PageContainer";
 import { useActivePage } from "@toolpad/core";
 
 export default function CreateOrganizationPage() {
-    // const router = useRouter();
+    const router = useRouter();
     const activePage = useActivePage();
 
     const { data: availableOrganizationTypes, loading: loadingTypes } = useAvailableOrganizationTypes();
@@ -81,7 +81,7 @@ export default function CreateOrganizationPage() {
         const res = await createOrganization(orgInput);
 
         if (res.ok) {
-            // router.push(`/organizations`);
+            router.push(`/organizations`);
         } else {
             console.error("Organization creation failed");
         }
@@ -95,7 +95,6 @@ export default function CreateOrganizationPage() {
     }
 
     return (
-        <Suspense fallback={<Skeleton variant="text" width="40%" height={40} />}>
         <PageContainer title="Create New Organization" breadcrumbs={breadcrumbs}>
 
             {loadingTypes || loadingResellers ? (
@@ -172,6 +171,5 @@ export default function CreateOrganizationPage() {
                 </Stack>
             )}
         </PageContainer>
-        </Suspense>
     );
 }
