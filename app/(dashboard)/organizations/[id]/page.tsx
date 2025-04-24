@@ -22,7 +22,7 @@ import {
     deleteOrganizationPackageDetails,
     restoreOrganization
 } from "@/api/organizations";
-import { PageContainer } from "@toolpad/core/PageContainer";
+import {Breadcrumb, PageContainer} from "@toolpad/core/PageContainer";
 import { useActivePage } from "@toolpad/core";
 import PaginatedTable from "@/components/PaginatedTable";
 import {HeadCell} from "@/types/HeadCell";
@@ -127,10 +127,13 @@ export default function HomePage() {
         if (res.ok) refetch();
     };
 
-    const breadcrumbs = [
-        ...activePage.breadcrumbs,
-        { title: `${params.id}`, path: `${activePage.path}/${params.id}` },
-    ];
+    let breadcrumbs: Breadcrumb[] = [{title: "loading...", path: "/"}];
+    if (activePage) {
+        breadcrumbs = [
+            ...activePage.breadcrumbs,
+            { title: `${params.id}`, path: `${activePage.path}/${params.id}` },
+        ];
+    }
 
     const renderField = (label: string, value?: string | number | null) => (
         <>

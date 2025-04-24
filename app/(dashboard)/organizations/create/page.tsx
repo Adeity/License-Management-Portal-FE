@@ -15,11 +15,11 @@ import useAvailableOrganizationTypes from "@/hooks/availableOrganizationTypesHoo
 import getResellersHook from "@/hooks/getResellersHook";
 import { createOrganization } from "@/api/organizations";
 import { useRouter } from "next/navigation";
-import { PageContainer } from "@toolpad/core/PageContainer";
+import {Breadcrumb, PageContainer} from "@toolpad/core/PageContainer";
 import { useActivePage } from "@toolpad/core";
 
 export default function CreateOrganizationPage() {
-    const router = useRouter();
+    // const router = useRouter();
     const activePage = useActivePage();
 
     const { data: availableOrganizationTypes, loading: loadingTypes } = useAvailableOrganizationTypes();
@@ -81,15 +81,18 @@ export default function CreateOrganizationPage() {
         const res = await createOrganization(orgInput);
 
         if (res.ok) {
-            router.push(`/organizations`);
+            // router.push(`/organizations`);
         } else {
             console.error("Organization creation failed");
         }
     };
 
     const breadcrumbTitle = `Create`;
-    const path = `${activePage.path}/create`;
-    const breadcrumbs = [...activePage.breadcrumbs, { title: breadcrumbTitle, path }];
+    let breadcrumbs: Breadcrumb[] = [{title: "loading...", path: "/"}];
+    if (activePage) {
+        const path = `${activePage.path}/create`;
+        breadcrumbs = [...activePage.breadcrumbs, { title: breadcrumbTitle, path }];
+    }
 
     return (
         <Suspense fallback={<Skeleton variant="text" width="40%" height={40} />}>
