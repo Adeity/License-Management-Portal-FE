@@ -82,8 +82,8 @@ export default function CreateOrganizationPage() {
     return (
         <PageContainer title="Create New Organization" breadcrumbs={breadcrumbs}>
             <Box component="form" sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
-                {errorMessage && <Alert variant={"outlined"}>{errorMessage}</Alert>}
-                {successMessage && <Alert variant={"outlined"}>{successMessage}</Alert>}
+                {errorMessage && <Alert severity="error">{errorMessage}</Alert>}
+                {successMessage && <Alert severity="success">{successMessage}</Alert>}
 
                 <TextField
                     label="Name"
