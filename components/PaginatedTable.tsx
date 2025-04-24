@@ -1,3 +1,4 @@
+"use client"
 import * as React from 'react';
 import {alpha} from '@mui/material/styles';
 import Box from '@mui/material/Box';
@@ -12,7 +13,7 @@ import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import Paper from '@mui/material/Paper';
 import FormControlLabel from '@mui/material/FormControlLabel';
-import Switch from '@mui/material/Switch';
+import Switch, {SwitchProps} from '@mui/material/Switch';
 import {HeadCell} from '@/types/HeadCell';
 import {PaginatedResponse} from "@/types/PaginatedResponse";
 import {useRouter} from "next/navigation";
@@ -182,7 +183,8 @@ export default function PaginatedTable(props: EnhancedTableProps) {
                   onSelectAllClick={handleSelectAllClick}
                   rowCount={rows.length}
                   headCells={headCells}
-                  actions={renderRowActions}
+                  loading={loading}
+                  actions={renderRowActions !== null}
               />
               <TableBody>
                 {loading || !paginatedData ? (
@@ -246,10 +248,6 @@ export default function PaginatedTable(props: EnhancedTableProps) {
 
 
         </Paper>
-        <FormControlLabel
-            control={<Switch checked={dense} onChange={handleChangeDense} />}
-            label="Dense padding"
-        />
       </Box>
   );
 }

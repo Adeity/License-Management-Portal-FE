@@ -96,7 +96,6 @@ export function GenerateLicenseModal(props: SimpleDialogProps) {
                                    variant="outlined"
                                    disabled
                                    defaultValue={props.organizationAccountName}
-                                   slotProps={{input: {readOnly: true}}}
                         />
                         <TextField select
                                    sx={{marginTop: 2}}

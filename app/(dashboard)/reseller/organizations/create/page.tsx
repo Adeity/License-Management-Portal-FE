@@ -1,6 +1,7 @@
 ﻿"use client"
 
-import { Alert, Button, Skeleton, TextField } from "@mui/material";
+import { Button, Skeleton, TextField } from "@mui/material";
+import Alert from '@mui/material/Alert';
 import Box from "@mui/material/Box";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
@@ -81,8 +82,8 @@ export default function CreateOrganizationPage() {
     return (
         <PageContainer title="Create New Organization" breadcrumbs={breadcrumbs}>
             <Box component="form" sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
-                {errorMessage && <Alert severity="error">{errorMessage}</Alert>}
-                {successMessage && <Alert severity="success">{successMessage}</Alert>}
+                {errorMessage && {errorMessage}}
+                {successMessage && {successMessage}}
 
                 <TextField
                     label="Name"

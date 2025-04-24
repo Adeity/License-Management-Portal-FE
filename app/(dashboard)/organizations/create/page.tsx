@@ -10,7 +10,7 @@ import {
     Typography,
     Skeleton,
 } from "@mui/material";
-import { useState } from "react";
+import {Suspense, useState} from "react";
 import useAvailableOrganizationTypes from "@/hooks/availableOrganizationTypesHook";
 import getResellersHook from "@/hooks/getResellersHook";
 import { createOrganization } from "@/api/organizations";
@@ -92,7 +92,9 @@ export default function CreateOrganizationPage() {
     const breadcrumbs = [...activePage.breadcrumbs, { title: breadcrumbTitle, path }];
 
     return (
+        <Suspense fallback={<Skeleton variant="text" width="40%" height={40} />}>
         <PageContainer title="Create New Organization" breadcrumbs={breadcrumbs}>
+
             {loadingTypes || loadingResellers ? (
                 <Stack spacing={3}>
                     <Skeleton variant="text" width="40%" height={40} />
@@ -167,5 +169,6 @@ export default function CreateOrganizationPage() {
                 </Stack>
             )}
         </PageContainer>
+        </Suspense>
     );
 }

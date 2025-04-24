@@ -30,7 +30,8 @@ import useFetchApi from "@/hooks/useFetchApi";
 import {getAllPackageDetails} from "@/api/packageDetails";
 import AssignPackageDetailModal from "@/components/AssignPackageDetailModal";
 import {useState} from "react";
-import ConfirmDeletePackageModal from "@/components/ConfirmDeletePackageModal"; // Adjust path if needed
+import ConfirmDeletePackageModal from "@/components/ConfirmDeletePackageModal";
+import {PaginatedResponse} from "@/types/PaginatedResponse"; // Adjust path if needed
 
 // Define head cells for package details table
 const packageDetailsHeadCells: readonly HeadCell[] = [
@@ -132,13 +133,22 @@ export default function HomePage() {
     ];
 
     const renderField = (label: string, value?: string | number | null) => (
-        <TextField
-            fullWidth
-            label={label}
-            variant="outlined"
-            defaultValue={value ?? ""}
-            InputProps={{ readOnly: true }}
-        />
+        <>
+            <Grid item xs={4}>
+                <Typography color="textSecondary">{label}:</Typography>
+            </Grid>
+            <Grid item xs={8}>
+                <Typography>{value}</Typography>
+            </Grid>
+        </>
+        // <TextField
+        //     fullWidth
+        //     label={label}
+        //     variant="outlined"
+        //     defaultValue={value ?? ""}
+        //     disabled
+        //     // InputProps={{ readOnly: true }}
+        // />
     );
 
     const renderGeneralInfo = () => (
@@ -184,9 +194,13 @@ export default function HomePage() {
     );
 
     const renderPackageDetails = () => {
-        const paginatedPackageData = {
+        const paginatedPackageData: PaginatedResponse<any> = {
             items: data.organizationPackageDetails ?? [],
-            totalCount: data.organizationPackageDetails?.length ?? 0,
+            totalItems: data.organizationPackageDetails?.length ?? 0,
+            pageNumber: 0,
+            totalPages: 0,
+            nextPage: null,
+            previousPage: null,
         };
         const renderRowActions = (row: any) => (
             <IconButton onClick={(e) => handleMenuClick(e, row.id)}>
@@ -246,7 +260,6 @@ export default function HomePage() {
                     title="Package Details"
                     paginatedData={paginatedPackageData}
                     headCells={packageDetailsHeadCells}
-                    clickable={false}
                     loading={false}
                     rowsPerPage={5}
                     setPageNumber={() => {}}

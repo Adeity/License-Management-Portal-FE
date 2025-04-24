@@ -151,15 +151,6 @@ export default function HomePage() {
                     <Grid item xs={12} md={6}>
                         <TextField
                             fullWidth
-                            label="Id"
-                            variant="outlined"
-                            defaultValue={data.id}
-                            InputProps={{ readOnly: true }}
-                        />
-                    </Grid>
-                    <Grid item xs={12} md={6}>
-                        <TextField
-                            fullWidth
                             label="Name"
                             variant="outlined"
                             error={!!nameValidationError}

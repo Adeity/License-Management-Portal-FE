@@ -10,10 +10,6 @@ import {Authentication, NavigationItem} from "@toolpad/core";
 import {logout} from "@/api/login";
 import {SessionProvider, useCustomSession} from "@/context/SessionContext";
 import {useRouter} from "next/navigation";
-import {PageContainer} from "@toolpad/core/PageContainer";
-import { Crud, DataModel, DataSource, DataSourceCache } from '@toolpad/core/Crud';
-import {DashboardLayout} from "@toolpad/core/DashboardLayout";
-import {Organization, organizationsDataSource} from "@/datasource/organizations/organizations";
 
 import { useMediaQuery, useTheme } from '@mui/material';
 
@@ -62,7 +58,7 @@ const NAVIGATION: ExtendedNavigation = [
 ];
 
 const BRANDING = {
-  title: <BrandingTitle />,
+  title: "LMP",
   logo: <span className={'hide-icon'}></span>,
 };
 
@@ -84,7 +80,7 @@ export default function RootLayout(props: { children: React.ReactNode }) {
   );
 }
 
-export function MyAppProvider (props: { children: React.ReactNode }) {
+function MyAppProvider (props: { children: React.ReactNode }) {
   const { customSession, setCustomSession } = useCustomSession();
   const router = useRouter()
   const authentication: Authentication = {
