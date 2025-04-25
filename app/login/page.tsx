@@ -28,7 +28,11 @@ export default function HomePage() {
                         localStorage.setItem('user', JSON.stringify(userData));
                         setCustomSession(userData)
                         resolve({})
-                        router.push('/')
+                        if(json.role === 'Admin') {
+                            router.push('/organizations')
+                        } else if (json.role === 'Reseller') {
+                            router.push('/reseller')
+                        }
                     }
                 })
                 .catch((error) => {
