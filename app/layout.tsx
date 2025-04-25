@@ -11,7 +11,8 @@ import {logout} from "@/api/login";
 import {SessionProvider, useCustomSession} from "@/context/SessionContext";
 import {useRouter} from "next/navigation";
 
-import { useMediaQuery, useTheme } from '@mui/material';
+import {CircularProgress, useMediaQuery, useTheme} from '@mui/material';
+import {Suspense} from "react";
 
 // Responsive title component
 function BrandingTitle() {
@@ -66,15 +67,15 @@ export default function RootLayout(props: { children: React.ReactNode }) {
   return (
     <html lang="en" data-toolpad-color-scheme="light" suppressHydrationWarning>
       <body>
-        
-          <AppRouterCacheProvider options={{ enableCssLayer: true }}>
-            <SessionProvider>
-              <MyAppProvider>
-                {props.children}
-              </MyAppProvider>
-            </SessionProvider>
-          </AppRouterCacheProvider>
-        
+
+        <AppRouterCacheProvider options={{ enableCssLayer: true }}>
+          <SessionProvider>
+            <MyAppProvider>
+              {props.children}
+            </MyAppProvider>
+          </SessionProvider>
+        </AppRouterCacheProvider>
+
       </body>
     </html>
   );
@@ -102,14 +103,16 @@ function MyAppProvider (props: { children: React.ReactNode }) {
   })
 
   return (
-      <AppProvider
-          navigation={NAVIGATION_BASED_ON_USER_ROLE}
-          branding={BRANDING}
-          authentication={authentication}
-          session={customSession}
-      >
+      <Suspense fallback={<CircularProgress size={"5rem"}/>}>
+        <AppProvider
+            navigation={NAVIGATION_BASED_ON_USER_ROLE}
+            branding={BRANDING}
+            authentication={authentication}
+            session={customSession}
+        >
             {props.children}
-      </AppProvider>
+        </AppProvider>
+      </Suspense>
       )
 }
 

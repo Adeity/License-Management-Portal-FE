@@ -15,7 +15,7 @@
     "@mui/material": "^6",
     "@mui/material-nextjs": "^6",
     "@toolpad/core": "^0.13.0",
-    "next": "^14.0.0",
+    "next": "^15.0.0",
     "react": "^18",
     "react-dom": "^18"
   },
