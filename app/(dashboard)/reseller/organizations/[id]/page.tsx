@@ -2,12 +2,10 @@
 import * as React from 'react';
 import Typography from '@mui/material/Typography';
 import {PageContainer} from "@toolpad/core/PageContainer";
-import {useActivePage} from "@toolpad/core";
 import {useParams} from "next/navigation";
 import Box from "@mui/material/Box";
 import {Grid} from "@mui/material";
-import {Button, Skeleton, Tab, Tabs, TextField} from "@mui/material";
-import { useOrganizationByIdHook } from "@/hooks/useOrganizationById";
+import {Button, Skeleton, Tab, Tabs} from "@mui/material";
 import {Stack} from "@mui/system";
 import {useEffect, useState} from "react";
 import PaginatedTable from "@/components/PaginatedTable";
@@ -112,7 +110,6 @@ const SkeletonForm = () => (
 );
 
 export default function HomePage() {
-    const activePage = useActivePage();
     const params = useParams()
 
     const [generateLicenseDialogOpen, setgenerateLicenseDialogOpen] = React.useState(false);
@@ -125,7 +122,6 @@ export default function HomePage() {
 
     // Generate License Dialog
     const [generatingLicense, setGeneratingLicense] = React.useState(false);
-    const [generatingLicenseResultSuccess, setGeneratingLicenseResultSuccess] = React.useState(false);
     const [generatingResult, setGeneratingResult] = React.useState("");
 
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
@@ -179,16 +175,12 @@ export default function HomePage() {
         loading: loadingLicense,
         refetch: refetchLicenses
     } = useFetchApi(() => getLicensesByOrgId(params.id, pageNumber, rowsPerPage), [pageNumber, rowsPerPage]);
-    const {data: dataOrgPackageDetails, error: errorOrgPackageDetails, loading: loadingOrgPackageDetails, refetch: refetchPackageDetails} = useFetchApi(getPackageDetails)
-    const {data: dataAllOrganizations, error: errorAllOrganizations, loading: loadingAllOrganizations} = useFetchApi(() => getResellersOrganizations())
+    const {data: dataOrgPackageDetails, loading: loadingOrgPackageDetails, refetch: refetchPackageDetails} = useFetchApi(getPackageDetails)
+    const {data: dataAllOrganizations} = useFetchApi(() => getResellersOrganizations())
 
     useEffect(() => {
         refetchLicenses()
     },[pageNumber, rowsPerPage])
-
-    const handleClickOpen = () => {
-        setgenerateLicenseDialogOpen(true);
-    };
 
     const generateLicense = async (packageDetailsId: number, quantityOfLicenses: number = 1) => {
         setGeneratingLicense(true);

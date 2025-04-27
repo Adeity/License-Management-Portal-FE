@@ -12,8 +12,6 @@ import TableRow from '@mui/material/TableRow';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import Paper from '@mui/material/Paper';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Switch, {SwitchProps} from '@mui/material/Switch';
 import {HeadCell} from '@/types/HeadCell';
 import {PaginatedResponse} from "@/types/PaginatedResponse";
 import {useRouter} from "next/navigation";
@@ -33,7 +31,7 @@ interface EnhancedTableHeadProps {
 }
 
 function EnhancedTableHead(props: EnhancedTableHeadProps) {
-  const { onSelectAllClick, order, orderBy, numSelected, rowCount, headCells, actions } =
+  const { headCells, actions } =
       props;
 
   return (
@@ -135,10 +133,9 @@ export default function PaginatedTable(props: EnhancedTableProps) {
   const pageNumber = paginatedData?.pageNumber ?? 1;
   const page = pageNumber - 1;
 
-  const [order, setOrder] = React.useState<Order>('asc');
-  const [orderBy, setOrderBy] = React.useState<string>('name');
+  const [order] = React.useState<Order>('asc');
+  const [orderBy] = React.useState<string>('name');
   const [selected, setSelected] = React.useState<readonly number[]>([]);
-  const [dense, setDense] = React.useState(false);
 
   const handleSelectAllClick = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.checked) {
@@ -162,10 +159,6 @@ export default function PaginatedTable(props: EnhancedTableProps) {
     setRowsPerPage(parseInt(event.target.value, 10));
   };
 
-  const handleChangeDense = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setDense(event.target.checked);
-  };
-
   return (
       <Box sx={{ width: '100%' }}>
         <Paper sx={{ width: '100%', mb: 2 }}>
@@ -174,7 +167,7 @@ export default function PaginatedTable(props: EnhancedTableProps) {
             <Table
                 sx={{ minWidth: 750 }}
                 aria-labelledby="tableTitle"
-                size={dense ? 'small' : 'medium'}
+                size={'medium'}
             >
               <EnhancedTableHead
                   numSelected={selected.length}
@@ -202,7 +195,6 @@ export default function PaginatedTable(props: EnhancedTableProps) {
                 ) : (
                     rows.map((row, index) => {
                       const isItemSelected = selected.includes(row.id);
-                      const labelId = `enhanced-table-checkbox-${index}`;
                       return (
                           <TableRow
                               hover={rowClickable}

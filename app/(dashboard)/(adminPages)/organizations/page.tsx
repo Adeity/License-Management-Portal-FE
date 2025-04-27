@@ -52,7 +52,6 @@ export default function OrganizationListPage() {
             return res.json()
         })
             .then((data) => {
-                const modifiedDataItems = []
                 setData(data);
                 setLoading(false)
             })

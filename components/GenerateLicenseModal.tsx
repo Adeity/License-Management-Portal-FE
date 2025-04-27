@@ -1,6 +1,5 @@
 ﻿"use client"
 import {
-    Backdrop,
     Button,
     Checkbox, CircularProgress,
     Dialog,
@@ -13,7 +12,7 @@ import {
 import {useState} from "react";
 import Box from "@mui/material/Box";
 import * as React from "react";
-import {padding, Stack} from "@mui/system";
+import {Stack} from "@mui/system";
 import Typography from "@mui/material/Typography";
 
 interface PackageDetails {
@@ -24,7 +23,6 @@ interface PackageDetails {
 
 export interface SimpleDialogProps {
     open: boolean;
-    // selectedValue: string;
     onClose: () => void;
     organizationAccountName: string;
     onSubmit: (packageDetailsId: number, quantityOfLicenses: number) => void;
@@ -43,21 +41,12 @@ export function GenerateLicenseModal(props: SimpleDialogProps) {
     const selectedPackageDetailProp = props.packageDetails.find(e => {
         return e.packageDetailsId === selectedPackageDetail
     })
-    const packdetailsRender = (
-        <p>
-            <b>Selected:</b> {selectedPackageDetailProp?.packageDetailTitle}
-        </p>
-    )
 
     const handleSubmit = () => {
         props.onSubmit(selectedPackageDetail, 1);
     }
 
     const handleClose = () => {
-        onClose();
-    };
-
-    const handleListItemClick = (value: string) => {
         onClose();
     };
 

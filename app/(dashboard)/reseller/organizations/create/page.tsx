@@ -6,7 +6,6 @@ import Box from "@mui/material/Box";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { PageContainer } from "@toolpad/core/PageContainer";
-import { useActivePage } from "@toolpad/core";
 import useFetchApi from "@/hooks/useFetchApi";
 import { createOrganization } from "@/api/organizations";
 import { getLoggedResellerInfo } from "@/api/reseller";
@@ -14,7 +13,6 @@ import {OrganizationType} from "@/enums/OrganizationType";
 
 export default function CreateOrganizationPage() {
     const router = useRouter();
-    const activePage = useActivePage();
 
     const [name, setName] = useState("");
     const [nameValidationError, setNameValidationError] = useState("");
@@ -24,7 +22,6 @@ export default function CreateOrganizationPage() {
 
     const {
         data: dataLoggedReseller,
-        error: errorLoggedReseller,
         loading: loadingLoggedReseller,
     } = useFetchApi(() => getLoggedResellerInfo());
 

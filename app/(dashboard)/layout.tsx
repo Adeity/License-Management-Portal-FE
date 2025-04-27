@@ -2,7 +2,7 @@
 import * as React from 'react';
 import {useEffect} from "react";
 import {checkUserInfo} from "@/api/login";
-import { DashboardLayout, SidebarFooterProps } from '@toolpad/core/DashboardLayout';
+import { DashboardLayout } from '@toolpad/core/DashboardLayout';
 import {useCustomSession} from "@/context/SessionContext";
 import {usePathname, useRouter} from "next/navigation";
 import {CircularProgress} from "@mui/material";

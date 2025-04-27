@@ -16,7 +16,7 @@ import { useOrganizationByIdHook } from "@/hooks/useOrganizationById";
 import {useAvailableOrganizationTypes} from "@/hooks/availableOrganizationTypesHook";
 import {getResellersHook} from "@/hooks/getResellersHook";
 import { useState, useEffect } from "react";
-import { createOrganization, updateOrganization } from "@/api/organizations";
+import { updateOrganization } from "@/api/organizations";
 import { useActivePage } from "@toolpad/core";
 import {Breadcrumb, PageContainer} from "@toolpad/core/PageContainer";
 

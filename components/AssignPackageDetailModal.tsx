@@ -36,7 +36,6 @@ export default function AssignPackageDetailModal({
                                                      onClose,
                                                      onAssign,
                                                      packageDetails,
-                                                     organizationName,
                                                      loading
                                                  }: AssignPackageDetailModalProps) {
     const [selectedPackageId, setSelectedPackageId] = useState<number | null>(null);

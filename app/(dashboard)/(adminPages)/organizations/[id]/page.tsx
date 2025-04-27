@@ -5,7 +5,6 @@ import { useRouter, useParams } from "next/navigation";
 import {
     Typography,
     Button,
-    TextField,
     Box,
     Stack,
     Skeleton,
@@ -14,7 +13,7 @@ import {
     Tab,
 } from "@mui/material";
 import MoreVertIcon from '@mui/icons-material/MoreVert';
-import { IconButton, Menu, MenuItem, Dialog, DialogTitle, DialogContent, DialogActions } from '@mui/material';
+import { IconButton, Menu, MenuItem } from '@mui/material';
 import * as React from "react";
 import {
     createOrganizationPackageDetails,
@@ -31,7 +30,7 @@ import {getAllPackageDetails} from "@/api/packageDetails";
 import AssignPackageDetailModal from "@/components/AssignPackageDetailModal";
 import {useState} from "react";
 import ConfirmDeletePackageModal from "@/components/ConfirmDeletePackageModal";
-import {PaginatedResponse} from "@/types/PaginatedResponse"; // Adjust path if needed
+import {PaginatedResponse} from "@/types/PaginatedResponse";
 
 // Define head cells for package details table
 const packageDetailsHeadCells: readonly HeadCell[] = [
@@ -65,12 +64,8 @@ export default function HomePage() {
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
     const [selectedPackageDetailId, setSelectedPackageDetailId] = useState<number | null>(null);
     const [confirmDeleteOpen, setConfirmDeleteOpen] = useState(false);
-    const [deleting, setDeletingPackage] = useState(false);
-    const [deleteSuccess, setDeletePackageSuccess] = useState(false);
-    const [deleteError, setDeletePackageError] = useState<string | null>(null);
 
-
-    const {data: dataPackageDetails, error: errorPackageDetails, loading: loadingPackageDetails} = useFetchApi(() => getAllPackageDetails())
+    const {data: dataPackageDetails, loading: loadingPackageDetails} = useFetchApi(() => getAllPackageDetails())
     console.log('data package details', dataPackageDetails)
 
     const [assignDialogOpen, setAssignDialogOpen] = React.useState(false);
@@ -145,14 +140,6 @@ export default function HomePage() {
                 <Typography>{value}</Typography>
             </Grid>
         </>
-        // <TextField
-        //     fullWidth
-        //     label={label}
-        //     variant="outlined"
-        //     defaultValue={value ?? ""}
-        //     disabled
-        //     // InputProps={{ readOnly: true }}
-        // />
     );
 
     const renderGeneralInfo = () => (
@@ -230,8 +217,6 @@ export default function HomePage() {
                     open={confirmDeleteOpen}
                     onClose={() => {
                         setConfirmDeleteOpen(false);
-                        setDeletePackageError(null);
-                        setDeletePackageSuccess(false);
                         refetch();
                     }}
                     onDelete={handleConfirmDelete}

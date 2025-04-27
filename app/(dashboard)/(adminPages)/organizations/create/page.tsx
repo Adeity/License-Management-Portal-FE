@@ -2,15 +2,13 @@
 
 import {
     Button,
-    MenuItem,
     TextField,
     Box,
     Stack,
     Grid,
-    Typography,
     Skeleton, Select, FormHelperText, FormControl, InputLabel,
 } from "@mui/material";
-import {Suspense, useState} from "react";
+import {useState} from "react";
 import {useAvailableOrganizationTypes} from "@/hooks/availableOrganizationTypesHook";
 import {getResellersHook} from "@/hooks/getResellersHook";
 import { createOrganization } from "@/api/organizations";

@@ -3,25 +3,14 @@ import * as React from 'react';
 import { AppProvider } from '@toolpad/core/nextjs';
 import { AppRouterCacheProvider } from '@mui/material-nextjs/v14-appRouter';
 import DashboardIcon from '@mui/icons-material/Dashboard';
-import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import BusinessIcon from '@mui/icons-material/Business';
-import type {Navigation} from '@toolpad/core/AppProvider';
 import {Authentication, NavigationItem} from "@toolpad/core";
 import {logout} from "@/api/login";
 import {SessionProvider, useCustomSession} from "@/context/SessionContext";
 import {useRouter} from "next/navigation";
 
-import {CircularProgress, useMediaQuery, useTheme} from '@mui/material';
+import {CircularProgress} from '@mui/material';
 import {Suspense} from "react";
-
-// Responsive title component
-function BrandingTitle() {
-  const theme = useTheme();
-  const isSmallScreen = useMediaQuery(theme.breakpoints.down('sm'));
-
-  return "LMP";
-}
-
 
 // New attribute to add
 interface ExtendedAttribute {
@@ -32,10 +21,6 @@ type ExtendedNavigationItem = NavigationItem & ExtendedAttribute;
 
 // Redefine Navigation to use ExtendedNavigationItem
 type ExtendedNavigation = ExtendedNavigationItem[];
-
-interface RoleNavigation extends Navigation {
-    roles?: string[];
-}
 
 const NAVIGATION: ExtendedNavigation = [
   {
