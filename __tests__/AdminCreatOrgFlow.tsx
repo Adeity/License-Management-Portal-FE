@@ -80,9 +80,9 @@ jest.mock('@/hooks/getResellersHook', () => ({
 
 import { loginPost } from '@/api/login';
 import LoginPage from "@/app/login/page";
-import OrganizationListPage from "@/app/(dashboard)/organizations/page";
+import OrganizationListPage from "@/app/(dashboard)/(adminPages)/organizations/page";
 import {getAllOrganizationsPaginated} from "@/api/organizations";
-import CreateOrganizationPage from "@/app/(dashboard)/organizations/create/page";
+import CreateOrganizationPage from "@/app/(dashboard)/(adminPages)/organizations/create/page";
 
 describe('Creating organization flow, redirects unauthenticated users to login, admin logs in', () => {
     const mockPush = jest.fn();
