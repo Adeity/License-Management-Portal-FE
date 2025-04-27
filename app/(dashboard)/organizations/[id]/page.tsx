@@ -1,6 +1,6 @@
 ﻿"use client"
 
-import useOrganizationById from "@/hooks/useOrganizationById";
+import { useOrganizationByIdHook } from "@/hooks/useOrganizationById";
 import { useRouter, useParams } from "next/navigation";
 import {
     Typography,
@@ -60,7 +60,7 @@ export default function HomePage() {
     const params = useParams();
     const router = useRouter();
     const activePage = useActivePage();
-    const { data, error, loading, refetch } = useOrganizationById(params.id);
+    const { data, error, loading, refetch } = useOrganizationByIdHook(params.id);
     const [tab, setTab] = React.useState(0);
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
     const [selectedPackageDetailId, setSelectedPackageDetailId] = useState<number | null>(null);
@@ -71,6 +71,7 @@ export default function HomePage() {
 
 
     const {data: dataPackageDetails, error: errorPackageDetails, loading: loadingPackageDetails} = useFetchApi(() => getAllPackageDetails())
+    console.log('data package details', dataPackageDetails)
 
     const [assignDialogOpen, setAssignDialogOpen] = React.useState(false);
 
@@ -206,7 +207,7 @@ export default function HomePage() {
             previousPage: null,
         };
         const renderRowActions = (row: any) => (
-            <IconButton onClick={(e) => handleMenuClick(e, row.id)}>
+            <IconButton onClick={(e) => handleMenuClick(e, row.id)} data-testid={"actions-button"}>
                 <MoreVertIcon />
             </IconButton>
         );

@@ -8,11 +8,11 @@ import {
     Stack,
     Grid,
     Typography,
-    Skeleton,
+    Skeleton, Select, FormHelperText, FormControl, InputLabel,
 } from "@mui/material";
 import {Suspense, useState} from "react";
-import { useAvailableOrganizationTypes }from "@/hooks/availableOrganizationTypesHook";
-import { getResellersHook } from "@/hooks/getResellersHook";
+import {useAvailableOrganizationTypes} from "@/hooks/availableOrganizationTypesHook";
+import {getResellersHook} from "@/hooks/getResellersHook";
 import { createOrganization } from "@/api/organizations";
 import { useRouter } from "next/navigation";
 import {Breadcrumb, PageContainer} from "@toolpad/core/PageContainer";
@@ -72,11 +72,13 @@ export default function CreateOrganizationPage() {
         if (findValidationErrors()) return;
 
         const orgTypeId = availableOrganizationTypes.find((e) => e.name === orgType)?.id;
+        const orgId = resellers.find((e) => e.name === parentOrganization)?.id;
         const orgInput = {
             name,
             organizationTypeId: orgTypeId,
-            parentOrganizationId: parentOrganization || null,
+            parentOrganizationId: orgId || null,
         };
+
 
         const res = await createOrganization(orgInput);
 
@@ -123,42 +125,53 @@ export default function CreateOrganizationPage() {
                             />
                         </Grid>
                         <Grid item xs={12} md={6}>
-                            <TextField
-                                fullWidth
-                                select
-                                label="Organization Type"
-                                variant="outlined"
-                                error={!!orgTypeValidationError}
-                                helperText={orgTypeValidationError}
-                                value={orgType}
-                                onChange={onChangeType}
-                            >
-                                {availableOrganizationTypes.map((option) => (
-                                    <MenuItem key={option.id} value={option.name} aria-label={option.name}>
-                                        {option.name}
-                                    </MenuItem>
-                                ))}
-                            </TextField>
+                            <FormControl error={!!orgTypeValidationError} sx={{ width: "100%" }}>
+                                <InputLabel id={"organization-type-select-label"} htmlFor={"organization-type-select"}>Organization Type</InputLabel>
+                                <Select
+                                    id={"organization-type-select"}
+                                    native={true}
+                                    label="Organization Type"
+                                    variant="outlined"
+                                    value={orgType}
+                                    onChange={onChangeType}
+                                >
+                                    {availableOrganizationTypes.map((option) => (
+                                        <option key={option.id} value={option.name}>
+                                            {option.name}
+                                        </option>
+                                    ))}
+                                </Select>
+                                {orgTypeValidationError &&
+                                    <FormHelperText>{orgTypeValidationError}</FormHelperText>
+                                }
+                            </FormControl>
+
                         </Grid>
 
                         {creatingOrganizationTypeOrganization && (
                             <Grid item xs={12} md={6}>
-                                <TextField
-                                    fullWidth
-                                    select
-                                    label="Parent Organization"
-                                    variant="outlined"
-                                    error={!!parentOrganizationValidationError}
-                                    helperText={parentOrganizationValidationError}
-                                    value={parentOrganization}
-                                    onChange={onChangeReseller}
-                                >
-                                    {resellers.map((option) => (
-                                        <MenuItem key={option.id} value={option.id}>
-                                            {option.name}
-                                        </MenuItem>
-                                    ))}
-                                </TextField>
+                                <FormControl error={!!parentOrganizationValidationError} sx={{ width: "100%" }}>
+                                    <InputLabel id={"organization-type-select"} htmlFor={"parent-org-select"}>Parent Organization</InputLabel>
+                                    <Select
+                                        id="parent-org-select"
+                                        native={true}
+                                        label="Parent Organization"
+                                        variant="outlined"
+                                        value={parentOrganization}
+                                        onChange={onChangeReseller}
+                                    >
+
+                                        <option value="" disabled></option>
+                                        {resellers.map((option) => (
+                                            <option key={option.id} value={option.name}>
+                                                {option.name}
+                                            </option>
+                                        ))}
+                                    </Select>
+                                    {parentOrganizationValidationError &&
+                                        <FormHelperText>{parentOrganizationValidationError}</FormHelperText>
+                                    }
+                                </FormControl>
                             </Grid>
                         )}
                     </Grid>
@@ -173,3 +186,4 @@ export default function CreateOrganizationPage() {
         </PageContainer>
     );
 }
+

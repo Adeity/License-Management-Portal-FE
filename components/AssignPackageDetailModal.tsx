@@ -8,7 +8,6 @@ import {
     Stack,
     Typography,
     Select,
-    MenuItem,
     InputLabel,
     FormControl,
     CircularProgress,
@@ -48,8 +47,10 @@ export default function AssignPackageDetailModal({
     const [validationError, setValidationError] = useState<string | null>(null);
 
     const isEmpty = packageDetails && packageDetails.length === 0;
+    console.log('package details:', packageDetails)
 
     const handleSubmit = async () => {
+        console.log('handle submit called', licenseCount, selectedPackageId)
         const parsed = Number(licenseCount);
         if (!selectedPackageId || isNaN(parsed) || parsed < 1 || parsed > 2000) {
             setValidationError("Please enter a number between 1 and 2000");
@@ -81,7 +82,7 @@ export default function AssignPackageDetailModal({
     };
 
     return (
-        <Dialog open={open} onClose={handleClose} fullWidth maxWidth="sm">
+        <Dialog open={open} onClose={handleClose} fullWidth maxWidth="sm" data-testid={"assign-package-modal"}>
             <DialogTitle>Assign Package</DialogTitle>
             <DialogContent sx={{ display: 'flex', flexDirection: 'column', gap: 2, mt: 1 }}>
                 {loading ? (
@@ -115,25 +116,22 @@ export default function AssignPackageDetailModal({
                     </Stack>
                 ) : (
                     <Stack spacing={2} sx={{ mt: 2 }}>
-                        <TextField
-                            label="Target Organization"
-                            fullWidth
-                            value={organizationName}
-                            disabled
-                        />
 
                         <FormControl fullWidth>
-                            <InputLabel id="package-detail-select">Package</InputLabel>
+                            <InputLabel id="package-detail-select-label" htmlFor={"package-detail-select"}>Package</InputLabel>
                             <Select
-                                labelId="package-detail-select"
+                                id={"package-detail-select"}
+                                native={true}
+                                labelId="package-detail-select-label"
                                 value={selectedPackageId || ""}
                                 label="Package"
                                 onChange={(e) => setSelectedPackageId(Number(e.target.value))}
                             >
+                                <option  value=""></option>
                                 {packageDetails?.map(detail => (
-                                    <MenuItem key={detail.id} value={detail.id}>
+                                    <option key={detail.id} value={detail.id}>
                                         {detail.productNumber} – {detail.productName}: {detail.title}
-                                    </MenuItem>
+                                    </option>
                                 ))}
                             </Select>
                         </FormControl>

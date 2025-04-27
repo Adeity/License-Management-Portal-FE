@@ -7,7 +7,7 @@ import {useParams} from "next/navigation";
 import Box from "@mui/material/Box";
 import {Grid} from "@mui/material";
 import {Button, Skeleton, Tab, Tabs, TextField} from "@mui/material";
-import useOrganizationById from "@/hooks/useOrganizationById";
+import { useOrganizationByIdHook } from "@/hooks/useOrganizationById";
 import {Stack} from "@mui/system";
 import {useEffect, useState} from "react";
 import PaginatedTable from "@/components/PaginatedTable";

@@ -1,7 +1,7 @@
 ﻿import {useEffect, useState} from "react";
 import {getOrganizationById} from "@/api/organizations";
 
-const getResellersHook = (id) => {
+export const useOrganizationByIdHook = (id) => {
     const [data, setData] = useState(null);
     const [error, setError] = useState(null);
     const [loading, setLoading] = useState(true);
@@ -32,5 +32,3 @@ const getResellersHook = (id) => {
 
     return { data, error, loading, refetch };
 };
-
-export default getResellersHook;

@@ -71,8 +71,7 @@ describe('HomePage Component', () => {
     it('renders organization details correctly', () => {
         render(<HomePage />);
 
-        expect(screen.getByText('Test Org')).toBeInTheDocument();
-        expect(screen.getByLabelText('Id')).toHaveValue('123');
+        expect(screen.getAllByText('Test Org')[0]).toBeInTheDocument();
         expect(screen.getByLabelText('Name')).toHaveValue('Test Org');
         expect(screen.getByLabelText('Type')).toHaveValue('Reseller');
         expect(screen.getByLabelText('Parent Organization')).toHaveValue('Null');

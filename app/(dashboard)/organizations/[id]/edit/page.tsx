@@ -12,9 +12,9 @@ import {
 } from "@mui/material";
 import * as React from "react";
 import { useParams, useRouter } from "next/navigation";
-import useOrganizationById from "@/hooks/useOrganizationById";
-import useAvailableOrganizationTypes from "@/hooks/availableOrganizationTypesHook";
-import getResellersHook from "@/hooks/getResellersHook";
+import { useOrganizationByIdHook } from "@/hooks/useOrganizationById";
+import {useAvailableOrganizationTypes} from "@/hooks/availableOrganizationTypesHook";
+import {getResellersHook} from "@/hooks/getResellersHook";
 import { useState, useEffect } from "react";
 import { createOrganization, updateOrganization } from "@/api/organizations";
 import { useActivePage } from "@toolpad/core";
@@ -25,7 +25,7 @@ export default function HomePage() {
     const router = useRouter();
     const activePage = useActivePage();
 
-    const { data, error, loading } = useOrganizationById(params.id);
+    const { data, error, loading } = useOrganizationByIdHook(params.id);
     const {
         data: availableOrganizationTypes,
         loading: availableOrgTypesloading,
