@@ -11,8 +11,8 @@ import {
     Skeleton,
 } from "@mui/material";
 import {Suspense, useState} from "react";
-import useAvailableOrganizationTypes from "@/hooks/availableOrganizationTypesHook";
-import getResellersHook from "@/hooks/getResellersHook";
+import { useAvailableOrganizationTypes }from "@/hooks/availableOrganizationTypesHook";
+import { getResellersHook } from "@/hooks/getResellersHook";
 import { createOrganization } from "@/api/organizations";
 import { useRouter } from "next/navigation";
 import {Breadcrumb, PageContainer} from "@toolpad/core/PageContainer";
@@ -134,7 +134,7 @@ export default function CreateOrganizationPage() {
                                 onChange={onChangeType}
                             >
                                 {availableOrganizationTypes.map((option) => (
-                                    <MenuItem key={option.id} value={option.name}>
+                                    <MenuItem key={option.id} value={option.name} aria-label={option.name}>
                                         {option.name}
                                     </MenuItem>
                                 ))}

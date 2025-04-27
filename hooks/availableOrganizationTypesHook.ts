@@ -1,7 +1,7 @@
 ﻿import {useEffect, useState} from "react";
 import {getAvailableOrganizationTypes} from "@/api/organizationTypes";
 
-const useAvailableOrganizationTypes = () => {
+export const useAvailableOrganizationTypes = () => {
     const [data, setData] = useState(null);
     const [error, setError] = useState(null);
     const [loading, setLoading] = useState(true);
@@ -27,5 +27,3 @@ const useAvailableOrganizationTypes = () => {
 
     return { data, error, loading };
 };
-
-export default useAvailableOrganizationTypes;

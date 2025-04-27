@@ -37,7 +37,7 @@ const tableHeadCells: readonly HeadCell[] = [
     },
 ];
 
-export default function OrganizationList() {
+export default function OrganizationListPage() {
     // return (null)
     const [pageNumber, setPageNumber] = useState<number>(0);
     const [rowsPerPage, setRowsPerPage] = useState<number>(10);
@@ -61,6 +61,7 @@ export default function OrganizationList() {
                 setLoading(false)
             })
     }, [pageNumber, rowsPerPage]);
+    console.log('the data', data)
 
     return (
             <PageContainer >

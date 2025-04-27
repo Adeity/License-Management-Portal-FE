@@ -6,7 +6,7 @@ import {loginPost} from "@/api/login";
 import {useRouter} from "next/navigation";
 import {useCustomSession} from "@/context/SessionContext";
 
-export default function HomePage() {
+export default function LoginPage() {
     const router = useRouter()
     const { setCustomSession } = useCustomSession();
     const providers = [{ id: 'credentials', name: 'Email and Password' }];

@@ -3,7 +3,7 @@ import Typography from '@mui/material/Typography';
 import {PageContainer} from "@toolpad/core/PageContainer";
 
 
-export default function HomePage() {
+export default function DashboardDefaultPage() {
   
 
   return (    

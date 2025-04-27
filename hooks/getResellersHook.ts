@@ -1,7 +1,7 @@
 ﻿import {useEffect, useState} from "react";
 import {getResellers} from "@/api/resellers";
 
-const getResellersHook = () => {
+export const getResellersHook = () => {
     const [data, setData] = useState(null);
     const [error, setError] = useState(null);
     const [loading, setLoading] = useState(true);
@@ -27,5 +27,3 @@ const getResellersHook = () => {
 
     return { data, error, loading };
 };
-
-export default getResellersHook;
