@@ -46,7 +46,7 @@ function EnhancedTableHead(props: EnhancedTableHeadProps) {
                 {headCell.label}
               </TableCell>
           ))}
-          {actions &&
+          {!!actions &&
           <TableCell
             >
             Actions
@@ -177,7 +177,7 @@ export default function PaginatedTable(props: EnhancedTableProps) {
                   rowCount={rows.length}
                   headCells={headCells}
                   loading={loading}
-                  actions={renderRowActions !== null}
+                  actions={renderRowActions != null}
               />
               <TableBody>
                 {loading || !paginatedData ? (
@@ -212,7 +212,7 @@ export default function PaginatedTable(props: EnhancedTableProps) {
                                 </TableCell>
                             ))}
 
-                            {renderRowActions &&
+                            {renderRowActions != null &&
                                 <TableCell align="right">
                                   {props.renderRowActions?.(row)}
                                 </TableCell>
