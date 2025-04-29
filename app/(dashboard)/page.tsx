@@ -9,7 +9,7 @@ export default function DashboardDefaultPage() {
   return (    
       <PageContainer>
           <Typography>
-              Use the sidebar to navigete the app.
+              Use the sidebar to navigate the app.
           </Typography>
       </PageContainer>
   );

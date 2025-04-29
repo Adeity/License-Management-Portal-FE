@@ -1,10 +1,9 @@
-import { render, screen, waitFor } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import '@testing-library/jest-dom';
 import CreateOrganizationPage from '@/app/(dashboard)/reseller/organizations/create/page';
 import useFetchApi from '@/hooks/useFetchApi';
 import { createOrganization } from '@/api/organizations';
-import { useRouter } from 'next/navigation';
 
 jest.mock('@/hooks/useFetchApi');
 jest.mock('@/api/organizations');
@@ -15,7 +14,6 @@ jest.mock('next/navigation', () => ({
 describe('CreateOrganizationPage', () => {
     const mockUseFetchApi = useFetchApi as jest.Mock;
     const mockCreateOrganization = createOrganization as jest.Mock;
-    const pushMock = jest.fn();
 
     beforeEach(() => {
         mockUseFetchApi.mockReturnValue({

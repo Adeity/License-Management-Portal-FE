@@ -14,7 +14,6 @@ export default function Layout(props: { children: React.ReactNode }) {
     const router = useRouter()
     useEffect(() => {
         checkUserInfo().then(async (response) => {
-            console.log('response', response)
             if (response.status === 401) {
                 localStorage.setItem('user', '');
                 setCustomSession(null)

@@ -66,7 +66,6 @@ export default function HomePage() {
     const [confirmDeleteOpen, setConfirmDeleteOpen] = useState(false);
 
     const {data: dataPackageDetails, loading: loadingPackageDetails} = useFetchApi(() => getAllPackageDetails())
-    console.log('data package details', dataPackageDetails)
 
     const [assignDialogOpen, setAssignDialogOpen] = React.useState(false);
 

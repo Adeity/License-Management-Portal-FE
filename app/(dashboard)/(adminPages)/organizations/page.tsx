@@ -60,7 +60,6 @@ export default function OrganizationListPage() {
                 setLoading(false)
             })
     }, [pageNumber, rowsPerPage]);
-    console.log('the data', data)
 
     return (
             <PageContainer >

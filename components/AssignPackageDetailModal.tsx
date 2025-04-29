@@ -46,10 +46,8 @@ export default function AssignPackageDetailModal({
     const [validationError, setValidationError] = useState<string | null>(null);
 
     const isEmpty = packageDetails && packageDetails.length === 0;
-    console.log('package details:', packageDetails)
 
     const handleSubmit = async () => {
-        console.log('handle submit called', licenseCount, selectedPackageId)
         const parsed = Number(licenseCount);
         if (!selectedPackageId || isNaN(parsed) || parsed < 1 || parsed > 2000) {
             setValidationError("Please enter a number between 1 and 2000");

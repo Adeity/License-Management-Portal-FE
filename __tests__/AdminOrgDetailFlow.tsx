@@ -381,8 +381,6 @@ describe('Assign package flow, redirects unauthenticated users to login, admin l
         await waitFor(async () => {
             const packageOptionOne = within(packageSelect).getAllByRole('option')
             await expect(packageOptionOne[1]).toBeInTheDocument()
-            console.log('got here')
-            console.log(packageOptionOne[1].textContent)
             await userEvent.selectOptions(packageSelect, packageOptionOne[1].textContent);
         })
 
