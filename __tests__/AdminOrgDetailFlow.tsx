@@ -99,7 +99,6 @@ import { loginPost } from '@/api/login';
 import LoginPage from "@/app/login/page";
 import OrganizationListPage from "@/app/(dashboard)/(adminPages)/organizations/page";
 import {getAllOrganizationsPaginated} from "@/api/organizations";
-import CreateOrganizationPage from "@/app/(dashboard)/(adminPages)/organizations/create/page";
 import OrganizationDetailPage from "@/app/(dashboard)/(adminPages)/organizations/[id]/page";
 
 describe('Assign package flow, redirects unauthenticated users to login, admin logs in', () => {
