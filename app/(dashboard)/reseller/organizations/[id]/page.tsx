@@ -109,7 +109,7 @@ const SkeletonForm = () => (
     </Stack>
 );
 
-export default function HomePage() {
+export default function OrganizationDetailPage() {
     const params = useParams()
 
     const [generateLicenseDialogOpen, setgenerateLicenseDialogOpen] = React.useState(false);
