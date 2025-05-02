@@ -9,7 +9,7 @@ import { PageContainer } from "@toolpad/core/PageContainer";
 import useFetchApi from "@/hooks/useFetchApi";
 import { createOrganization } from "@/api/organizations";
 import { getLoggedResellerInfo } from "@/api/reseller";
-import {OrganizationType} from "@/enums/OrganizationType";
+import {OrganizationTypeNumeric} from "@/enums/OrganizationTypeNumeric";
 
 export default function CreateOrganizationPage() {
     const router = useRouter();
@@ -51,7 +51,7 @@ export default function CreateOrganizationPage() {
 
         const payload = {
             name: name,
-            organizationTypeId: OrganizationType.Organization, // assuming "Organization" has ID = 2
+            organizationTypeId: OrganizationTypeNumeric.Organization, // assuming "Organization" has ID = 2
             parentOrganizationId: dataLoggedReseller?.id,
         };
 

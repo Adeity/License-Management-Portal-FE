@@ -8,7 +8,7 @@ import {
     Skeleton,
     Box,
     Stack,
-    Grid,
+    Grid, FormControl, InputLabel, Select, FormHelperText,
 } from "@mui/material";
 import * as React from "react";
 import { useParams, useRouter } from "next/navigation";
@@ -38,6 +38,7 @@ export default function HomePage() {
     const [nameValidationError, setNameValidationError] = useState("");
     const [parentOrganization, setParentOrganization] = useState("");
     const [parentOrganizationValidationError, setParentOrganizationValidationError] = useState("");
+    const [changesWereMade, setchangesWereMade] = useState(false);
 
     const creatingOrganizationTypeOrganization = orgType === "Organization";
 
@@ -49,12 +50,19 @@ export default function HomePage() {
         }
     }, [data]);
 
-    const onChangeName = (e) => setName(e.target.value);
+    const onChangeName = (e) => {
+        setName(e.target.value);
+        setchangesWereMade(true)
+    }
     const onChangeType = (e) => {
         setOrgType(e.target.value);
         if (e.target.value === "Reseller") setParentOrganization("");
+        setchangesWereMade(true)
     };
-    const onChangeParentOrganization = (e) => setParentOrganization(e.target.value);
+    const onChangeParentOrganization = (e) => {
+        setParentOrganization(e.target.value);
+        setchangesWereMade(true)
+    }
 
     if (loading || resellersLoading || availableOrgTypesloading) {
         return (
@@ -117,12 +125,13 @@ export default function HomePage() {
         if (findValidationErrors()) return;
 
         const orgTypeId = availableOrganizationTypes.find((e) => e.name === orgType).id;
+        const parentOrgId = resellers.find((e) => e.name === parentOrganization)?.id;
 
         const orgInput = {
             id: params.id,
             name,
             organizationTypeId: orgTypeId,
-            parentOrganizationId: parentOrganization || null,
+            parentOrganizationId: parentOrgId,
         };
 
         const res = await updateOrganization(orgInput);
@@ -160,49 +169,65 @@ export default function HomePage() {
                             helperText={nameValidationError}
                             value={name}
                             onChange={onChangeName}
+                            data-cy-test="name-input"
                         />
                     </Grid>
                     <Grid item xs={12} md={6}>
-                        <TextField
-                            fullWidth
-                            select
-                            label="Organization Type"
-                            variant="outlined"
-                            error={!!orgTypeValidationError}
-                            helperText={orgTypeValidationError}
-                            value={orgType}
-                            onChange={onChangeType}
-                        >
-                            {availableOrganizationTypes.map((option) => (
-                                <MenuItem key={option.id} value={option.name}>
-                                    {option.name}
-                                </MenuItem>
-                            ))}
-                        </TextField>
+                        <FormControl error={!!orgTypeValidationError} sx={{ width: "100%" }}>
+                            <InputLabel id={"organization-type-select-label"} htmlFor={"organization-type-select"}>Organization Type</InputLabel>
+                            <Select
+                                id="organization-type-select"
+                                native={true}
+                                label="Organization Type"
+                                variant="outlined"
+                                value={orgType}
+                                onChange={onChangeType}
+                                data-cy-test={"organization-type-select"}
+                            >
+
+                                <option value="" disabled></option>
+                                {availableOrganizationTypes.map((option) => (
+                                    <option key={option.id} value={option.name}>
+                                        {option.name}
+                                    </option>
+                                ))}
+                            </Select>
+                            {orgTypeValidationError &&
+                                <FormHelperText>{orgTypeValidationError}</FormHelperText>
+                            }
+                        </FormControl>
+
                     </Grid>
                     {creatingOrganizationTypeOrganization && (
                         <Grid item xs={12} md={6}>
-                            <TextField
-                                fullWidth
-                                select
-                                label="Parent Organization"
-                                variant="outlined"
-                                error={!!parentOrganizationValidationError}
-                                helperText={parentOrganizationValidationError}
-                                value={parentOrganization}
-                                onChange={onChangeParentOrganization}
-                            >
-                                {resellersThatAreNotSelf.map((option) => (
-                                    <MenuItem key={option.id} value={option.id}>
-                                        {option.name}
-                                    </MenuItem>
-                                ))}
-                            </TextField>
+                            <FormControl error={!!parentOrganizationValidationError} sx={{ width: "100%" }}>
+                                <InputLabel id={"parent-type-select-label"} htmlFor={"parent-org-select"}>Parent Organization</InputLabel>
+                                <Select
+                                    id="parent-org-select"
+                                    native={true}
+                                    label="Parent Organization"
+                                    variant="outlined"
+                                    value={parentOrganization}
+                                    onChange={onChangeParentOrganization}
+                                    data-cy-test="parent-organization-select"
+                                >
+
+                                    <option value="" disabled></option>
+                                    {resellersThatAreNotSelf.map((option) => (
+                                        <option key={option.id} value={option.name}>
+                                            {option.name}
+                                        </option>
+                                    ))}
+                                </Select>
+                                {parentOrganizationValidationError &&
+                                    <FormHelperText>{parentOrganizationValidationError}</FormHelperText>
+                                }
+                            </FormControl>
                         </Grid>
                     )}
                 </Grid>
                 <Box>
-                    <Button variant="contained" onClick={onSubmit}>
+                    <Button variant="contained" onClick={onSubmit} disabled={!changesWereMade}>
                         Submit Changes
                     </Button>
                 </Box>

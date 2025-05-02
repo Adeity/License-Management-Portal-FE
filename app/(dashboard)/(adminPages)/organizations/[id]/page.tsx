@@ -158,9 +158,11 @@ export default function HomePage() {
                 <Grid item xs={12} md={6}>
                     {renderField("Type", data.organizationType)}
                 </Grid>
-                <Grid item xs={12} md={6}>
-                    {renderField("Parent Organization", data.parentOrganization || "Null")}
-                </Grid>
+                {data.parentOrganization &&
+                    <Grid item xs={12} md={6} data-cy-test="detail-parent-organization">
+                        {renderField("Parent Organization", data.parentOrganization || "Null")}
+                    </Grid>
+                }
             </Grid>
 
             <Box display="flex" gap={2} mt={2}>

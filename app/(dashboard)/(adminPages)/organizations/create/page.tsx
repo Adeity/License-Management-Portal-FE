@@ -120,6 +120,7 @@ export default function CreateOrganizationPage() {
                                 helperText={nameValidationError}
                                 value={name}
                                 onChange={onChangeName}
+                                data-cy-test="name-input"
                             />
                         </Grid>
                         <Grid item xs={12} md={6}>

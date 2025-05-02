@@ -42,7 +42,6 @@ export default function LoginPage() {
         })
     };
     return (
-        <>
             <SignInPage
                 signIn={signIn}
                 providers={providers}
@@ -51,6 +50,5 @@ export default function LoginPage() {
                 }}
                 slotProps={{ emailField: { autoFocus: false }, form: { noValidate: true }, rememberMe: { sx: { display: 'none' } } }}
             />
-        </>
     );
 }
