@@ -207,7 +207,7 @@ export default function PaginatedTable(props: EnhancedTableProps) {
                               sx={{ cursor: rowClickable ? 'pointer' : 'default' }}
                           >
                             {headCells.map((headCell) => (
-                                <TableCell key={headCell.id} align={headCell.numeric ? 'right' : 'left'}>
+                                <TableCell key={headCell.id} align={headCell.numeric ? 'right' : 'left'} data-cy-test={headCell.id}>
                                   {row[headCell.id]}
                                 </TableCell>
                             ))}

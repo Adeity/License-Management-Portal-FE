@@ -80,7 +80,7 @@ export default function AssignPackageDetailModal({
 
     return (
         <Dialog open={open} onClose={handleClose} fullWidth maxWidth="sm" data-testid={"assign-package-modal"}>
-            <DialogTitle>Assign Package</DialogTitle>
+            <DialogTitle>Assign New Package</DialogTitle>
             <DialogContent sx={{ display: 'flex', flexDirection: 'column', gap: 2, mt: 1 }}>
                 {loading ? (
                     <Stack spacing={2}>
@@ -147,6 +147,7 @@ export default function AssignPackageDetailModal({
                             }}
                             error={!!validationError}
                             helperText={validationError || "Enter a number from 1 to 2000"}
+                            data-cy-test="license-count-input"
                         />
                     </Stack>
                 )}
@@ -156,6 +157,7 @@ export default function AssignPackageDetailModal({
                 <DialogActions sx={{ px: 3, pb: 2 }}>
                     <Button onClick={handleClose}>Cancel</Button>
                     <Button
+                        data-cy-test="confirm-assign-package-button"
                         variant="contained"
                         onClick={handleSubmit}
                         disabled={!selectedPackageId || licenseCount === ""}

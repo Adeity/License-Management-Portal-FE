@@ -60,7 +60,7 @@ export default function CreateOrganizationPage() {
             const result = await res.json();
             if (res.ok) {
                 setSuccessMessage("Organization created successfully.");
-                setTimeout(() => router.push(`/reseller/organizations/${result.id}`), 1500);
+                router.push('/reseller')
             } else {
                 throw new Error(result?.message || "Failed to create organization.");
             }
@@ -90,6 +90,7 @@ export default function CreateOrganizationPage() {
                     value={name}
                     onChange={onChangeName}
                     disabled={creating}
+                    data-cy-test={"name-input"}
                 />
                 <TextField
                     label="Organization Type"

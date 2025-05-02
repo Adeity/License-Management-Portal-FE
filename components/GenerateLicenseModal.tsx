@@ -5,8 +5,8 @@ import {
     Dialog,
     DialogContent,
     DialogTitle,
-    Divider,
-    MenuItem,
+    Divider, FormControl, FormHelperText, InputLabel,
+    Select,
     TextField
 } from "@mui/material";
 import {useState} from "react";
@@ -35,18 +35,28 @@ export interface SimpleDialogProps {
 export function GenerateLicenseModal(props: SimpleDialogProps) {
     const {onClose, open} = props;
 
-    const [selectedPackageDetail, setSelectedPackageDetail] = useState<number>(props.packageDetails[0].packageDetailsId);
+    const noAvailablePackageDetails = props.packageDetails.length === 0;
+    const [selectedPackageDetail, setSelectedPackageDetail] = useState<number>(-1);
+    const [licenseTypeSelectError, setLicenseTypeSelectError] = useState<string | null>(null);
     const [tosChecked, setTosChecked] = useState<boolean>(false);
 
+    const allPackaceDetailsDrained = !noAvailablePackageDetails && props.packageDetails.every((packageDetail) => packageDetail.serialNumbersCount < 1);
+
     const selectedPackageDetailProp = props.packageDetails.find(e => {
-        return e.packageDetailsId === selectedPackageDetail
+        return e.packageDetailsId === Number(selectedPackageDetail)
     })
 
     const handleSubmit = () => {
+        if (selectedPackageDetail === null || selectedPackageDetail === undefined) {
+            setLicenseTypeSelectError("Please select a license type");
+            return;
+        }
         props.onSubmit(selectedPackageDetail, 1);
+        setTosChecked(false)
     }
 
     const handleClose = () => {
+        setTosChecked(false)
         onClose();
     };
 
@@ -55,7 +65,22 @@ export function GenerateLicenseModal(props: SimpleDialogProps) {
             <DialogTitle>Create License</DialogTitle>
             <Divider/>
             <DialogContent>
-                {props.generatingLicense ? (
+                {
+                    allPackaceDetailsDrained ?
+                    (
+                        <Stack alignItems="center" spacing={2}>
+                            <Typography variant="h5" color="error">All license packages have been fully used up</Typography>
+                            <Typography>Contact your administrator to receive a new license package.</Typography>
+                            <Button onClick={onClose} variant="outlined">Close</Button>
+                        </Stack>
+                    ): noAvailablePackageDetails ?
+                    (
+                        <Stack alignItems="center" spacing={2}>
+                            <Typography variant="h5" color="error">You have not been assigned any licenses package</Typography>
+                            <Typography>Contact your administrator to receive a license package.</Typography>
+                            <Button onClick={onClose} variant="outlined">Close</Button>
+                        </Stack>
+                    ) : props.generatingLicense ? (
                     <Stack alignItems="center" spacing={2} sx={{ py: 4 }}>
                         <CircularProgress />
                         <Typography variant="h6">Generating license...</Typography>
@@ -86,35 +111,48 @@ export function GenerateLicenseModal(props: SimpleDialogProps) {
                                    disabled
                                    defaultValue={props.organizationAccountName}
                         />
-                        <TextField select
-                                   sx={{marginTop: 2}}
-                                   id="outlined-basic"
-                                   label="License Type"
-                                   variant="outlined"
-                            // error={orgTypeValidationError !== ''}
-                            // helperText={orgTypeValidationError}
-                                   value={selectedPackageDetail}
-                                   onChange={(e) => setSelectedPackageDetail(e.target.value)}
-                        >
-                            {props.packageDetails ?
-                                props.packageDetails?.map((option) => (
-                                    <MenuItem key={option.packageDetailsId} value={option.packageDetailsId}>
-                                        {option.packageDetailTitle} (remaining {option.serialNumbersCount})
-                                    </MenuItem>
-                                )) :
-                                <MenuItem key={1} value={1}>1</MenuItem>
+                        <FormControl error={!!licenseTypeSelectError} sx={{ width: "100%", marginTop: 2 }}>
+                            <InputLabel id={"license-type-select-label"} htmlFor={"license-type-select"}>License Type</InputLabel>
+                            <Select
+                                id="license-type-select"
+                                native={true}
+                                label="License Type"
+                                variant="outlined"
+                                value={selectedPackageDetail}
+                                onChange={(e) => setSelectedPackageDetail(e.target.value)}
+                                data-cy-test={"license-type-select"}
+                            >
+
+                                <option value={-1} disabled></option>
+                                {props.packageDetails ?
+                                    props.packageDetails?.map((option) => {
+                                        const isDisabled = option.serialNumbersCount < 1;
+                                       return (
+                                        <option key={option.packageDetailsId} value={option.packageDetailsId} disabled={isDisabled}>
+                                            {isDisabled&&"(0 remaining)"}{option.packageDetailTitle} (remaining {option.serialNumbersCount})
+                                        </option>
+                                       )}
+                                    ) :
+                                    <option key={1} value={1}>1</option>
+                                }
+                            </Select>
+                            {licenseTypeSelectError &&
+                                <FormHelperText>{licenseTypeSelectError}</FormHelperText>
                             }
-                        </TextField>
-                        <p>Remaining licenses: {selectedPackageDetailProp?.serialNumbersCount}</p>
+                        </FormControl>
+                        {selectedPackageDetail != null && selectedPackageDetail !== -1 && (
+                            <p>Remaining licenses: {selectedPackageDetailProp?.serialNumbersCount}</p>
+                        )
+                        }
 
                         <Box sx={{display: "flex", flexDirection: "row", alignItems: "center", marginTop: 2}}>
-                            <Checkbox checked={tosChecked} onChange={() => setTosChecked(!tosChecked)}/> I have read,
+                            <Checkbox id={"tos-checkbox"} checked={tosChecked} onChange={() => setTosChecked(!tosChecked)}/> I have read,
                             understood and agree to the <a href={""} onClick={(e) => e.preventDefault()}> Terms and
                             Conditions</a>
                         </Box>
                         <Box sx={{justifyContent: 'space-between', display: 'flex', marginTop: 2}}>
                             <Button onClick={handleClose} variant="outlined">Cancel</Button>
-                            <Button onClick={handleSubmit} variant="contained" disabled={!tosChecked}>Confirm</Button>
+                            <Button onClick={handleSubmit} variant="contained" disabled={!tosChecked || selectedPackageDetail === -1}>Confirm</Button>
                         </Box>
                     </Stack>
                 )
