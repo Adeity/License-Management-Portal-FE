@@ -371,7 +371,7 @@ describe('Assign package flow, redirects unauthenticated users to login, admin l
 
         const assignPackageModal = screen.getByTestId('assign-package-modal');
 
-        expect(await within(assignPackageModal).findByText(/Assign Package/i)).toBeInTheDocument();
+        expect(await within(assignPackageModal).findByText(/Assign New Package/i)).toBeInTheDocument();
         const confirmButton = await within(assignPackageModal).findByRole('button', { name: /Assign/i });
         expect(confirmButton).toBeDisabled();
 
@@ -505,7 +505,7 @@ describe('Assign package flow, redirects unauthenticated users to login, admin l
 
         const assignPackageModal = screen.getByTestId('assign-package-modal');
 
-        expect(await within(assignPackageModal).findByText(/Assign Package/i)).toBeInTheDocument();
+        expect(await within(assignPackageModal).findByText(/Assign New Package/i)).toBeInTheDocument();
         const confirmButton = await within(assignPackageModal).findByRole('button', { name: /Assign/i });
         expect(confirmButton).toBeDisabled();
 

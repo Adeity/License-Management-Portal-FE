@@ -1,6 +1,7 @@
-import { render, screen, fireEvent } from '@testing-library/react'
+import {render, screen, fireEvent, within, waitFor} from '@testing-library/react'
 import '@testing-library/jest-dom'
 import { GenerateLicenseModal } from '@/components/GenerateLicenseModal'
+import userEvent from "@testing-library/user-event";
 
 describe('GenerateLicenseModal', () => {
     const baseProps = {
@@ -20,7 +21,7 @@ describe('GenerateLicenseModal', () => {
         generatingError: null,
     }
 
-    it('renders form fields correctly and disables Confirm until terms are accepted', () => {
+    it('renders form fields correctly and disables Confirm until terms are accepted', async () => {
         render(<GenerateLicenseModal {...baseProps} />)
 
         // Form labels
@@ -32,15 +33,28 @@ describe('GenerateLicenseModal', () => {
         const confirmButton = screen.getByRole('button', { name: /Confirm/i })
         expect(confirmButton).toBeDisabled()
 
+        const licenseTypeSelect = screen.getByRole('combobox', { name: /License Type/i });
+        licenseTypeSelect.click()
+        await waitFor(async () => {
+            const packageOptionOne = within(licenseTypeSelect).getAllByRole('option')
+            await userEvent.selectOptions(licenseTypeSelect, packageOptionOne[1].textContent);
+        })
+
         // Check terms and confirm is enabled
         const checkbox = screen.getByRole('checkbox')
         fireEvent.click(checkbox)
         expect(confirmButton).toBeEnabled()
     })
 
-    it('calls onSubmit when Confirm is clicked and terms accepted', () => {
+    it('calls onSubmit when Confirm is clicked and terms accepted', async () => {
         render(<GenerateLicenseModal {...baseProps} />)
 
+        const licenseTypeSelect = screen.getByRole('combobox', { name: /License Type/i });
+        licenseTypeSelect.click()
+        await waitFor(async () => {
+            const packageOptionOne = within(licenseTypeSelect).getAllByRole('option')
+            await userEvent.selectOptions(licenseTypeSelect, packageOptionOne[1].textContent);
+        })
         fireEvent.click(screen.getByRole('checkbox'))
         fireEvent.click(screen.getByRole('button', { name: /Confirm/i }))
 
