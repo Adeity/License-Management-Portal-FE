@@ -95,4 +95,34 @@ describe('GenerateLicenseModal', () => {
         expect(screen.getByText('WCF call failed')).toBeInTheDocument()
         expect(screen.getByRole('button', { name: /Close/i })).toBeInTheDocument()
     })
+
+    it('displays no packages assigned', () => {
+        render(
+            <GenerateLicenseModal
+                {...baseProps}
+                packageDetails={[]}
+            />
+        )
+
+        expect(screen.getByText('You have not been assigned any licenses package')).toBeInTheDocument()
+        expect(screen.getByRole('button', { name: /Close/i })).toBeInTheDocument()
+    })
+
+    it('displays all package details have been used up', () => {
+        render(
+            <GenerateLicenseModal
+                {...baseProps}
+                packageDetails={[
+                    {
+                        packageDetailsId: 2063,
+                        packageDetailTitle: 'TechAssist Professional',
+                        serialNumbersCount: 0,
+                    },
+                ]}
+            />
+        )
+
+        expect(screen.getByText('All license packages have been fully used up')).toBeInTheDocument()
+        expect(screen.getByRole('button', { name: /Close/i })).toBeInTheDocument()
+    })
 })
