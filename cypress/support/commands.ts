@@ -39,6 +39,9 @@ declare global {
          * @example cy.login('a@a.com', 'password')
          */
         login(email: string, password: string): Chainable<Element>;
+        loginAdmin(): Chainable<Element>;
+        loginReseller(): Chainable<Element>;
+        logoutAndLoginReseller(): Chainable<Element>;
         logout(): Chainable<Element>;
 
         /**
@@ -47,18 +50,24 @@ declare global {
         createOrgAsAdmin(name: string, type: OrganizationType, parentOrgName?: string): Chainable<Element>;
         createOrgAsReseller(name: string): Chainable<Element>;
 
+        visitResellersChildOrganizationDetail(name: string): Chainable<Element>;
+
         loadNextPage(): Chainable<Element>;
         findOrganizationOrPaginate(name: string): Chainable<Element>;
         clickOnOrganizationInTable(name: string): Chainable<Element>;
         deleteAllPackageDetails(): Chainable<Element>;
+        moveLicense(targetOrg: string): Chainable<Element>;
         assignPackage(quantity: number): Chainable<Element>;
         generateLicense(): Chainable<Element>;
+        assignToResellerPackageDetails(quantity: number): Chainable<Element>;
 
     }
   }
 }
 
 import { OrganizationType } from "../../enums/OrganizationType"
+
+const resellerName = "ECorp CHINA"
 
 Cypress.Commands.add('login', (email: string, password: string) => {
     cy.location('pathname').should('eq', '/login')
@@ -69,6 +78,17 @@ Cypress.Commands.add('login', (email: string, password: string) => {
     cy.contains('button', 'Sign In')
         .should('be.visible')
         .click()
+})
+
+Cypress.Commands.add('loginAdmin', () => {
+    cy.login("admin@p.com", "Admin123!")
+})
+Cypress.Commands.add('loginReseller', () => {
+    cy.login("reseller1@p.com", "Admin123!")
+})
+Cypress.Commands.add('logoutAndLoginReseller', () => {
+    cy.logout();
+    cy.login("reseller1@p.com", "Admin123!")
 })
 
 Cypress.Commands.add('logout', () => {
@@ -105,6 +125,14 @@ Cypress.Commands.add('createOrgAsReseller', (name: string) => {
     cy.contains('button', /create organization/i).click()
 
     cy.location('pathname').should('eq', '/reseller')
+})
+
+
+Cypress.Commands.add('visitResellersChildOrganizationDetail', (name: string) => {
+    cy.location('pathname').should('eq', '/reseller')
+    cy.findOrganizationOrPaginate(name)
+    cy.clickOnOrganizationInTable(name)
+    cy.contains('h4', name)
 })
 
 Cypress.Commands.add('loadNextPage', () => {
@@ -157,6 +185,34 @@ Cypress.Commands.add('deleteAllPackageDetails', () => {
     });
 })
 
+// login as admin and assign to reseller
+Cypress.Commands.add('assignToResellerPackageDetails', (quantity: number) => {
+    cy.visit('')
+    cy.loginAdmin()
+    cy.findOrganizationOrPaginate(resellerName)
+    cy.clickOnOrganizationInTable(resellerName)
+
+    cy.contains('button', 'Package Details').should('exist').click()
+
+    cy.deleteAllPackageDetails()
+
+    // there should be three packages available
+    cy.assignPackage(quantity)
+
+    cy.get('table tbody tr').should('have.length', 1)
+})
+
+
+Cypress.Commands.add('moveLicense', (targetOrg: string) => {
+    cy.get('button[data-testid="actions-button"]').first().click();
+    cy.contains('li', /move/i).click()
+    cy.contains('h2', /move license/i).should('exist')
+    cy.get('#move-license-select').select(targetOrg)
+    cy.get('button[data-cy-test="confirm-move-license-button"]').should('not.be.disabled')
+    cy.get('button[data-cy-test="confirm-move-license-button"]').click()
+    cy.contains(/license moved successfully/i).should('exist')
+    cy.contains('button', /close/i).click()
+})
 
 Cypress.Commands.add('assignPackage', (quantity: number) => {
 

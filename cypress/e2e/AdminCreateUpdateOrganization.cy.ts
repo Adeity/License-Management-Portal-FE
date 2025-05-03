@@ -4,7 +4,7 @@ import {OrganizationType} from "../../enums/OrganizationType";
 describe('(admin) create update organization', () => {
   //
   it('can update the name of a reseller', () => {
-          cy.visit('localhost:3000')
+          cy.visit('')
     cy.login("admin@p.com", "Admin123!")
 
     const newOrgName = faker.string.uuid()
@@ -41,7 +41,7 @@ describe('(admin) create update organization', () => {
 
 
   it('can create organization and edit his parent organization', () => {
-          cy.visit('localhost:3000')
+          cy.visit('')
     cy.login("admin@p.com", "Admin123!")
 
     const reseller1 = faker.string.uuid()
@@ -72,7 +72,7 @@ describe('(admin) create update organization', () => {
     cy.contains(reseller2).should('exist')
   })
   it('delete and restore organization', () => {
-    cy.visit('localhost:3000')
+    cy.visit('')
     cy.login("admin@p.com", "Admin123!")
 
     const newOrgName = faker.string.uuid()

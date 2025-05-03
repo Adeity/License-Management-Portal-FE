@@ -119,7 +119,7 @@ export function GenerateLicenseModal(props: SimpleDialogProps) {
                                 label="License Type"
                                 variant="outlined"
                                 value={selectedPackageDetail}
-                                onChange={(e) => setSelectedPackageDetail(e.target.value)}
+                                onChange={(e) => setSelectedPackageDetail(Number(e.target.value))}
                                 data-cy-test={"license-type-select"}
                             >
 

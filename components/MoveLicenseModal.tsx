@@ -7,12 +7,11 @@ import {
     Button,
     TextField,
     Select,
-    MenuItem,
     FormControl,
     InputLabel,
     Typography,
     Stack,
-    CircularProgress
+    CircularProgress, FormHelperText
 } from '@mui/material';
 
 interface MoveLicenseModalProps {
@@ -32,16 +31,22 @@ export default function MoveLicenseModal({
                                              sourceOrganization,
                                              targetOrganizations
                                          }: MoveLicenseModalProps) {
-    const [targetOrgId, setTargetOrgId] = useState<string>("");
+    const [targetOrgId, setTargetOrgId] = useState<number>(-1);
+    const [targetOrganizationError, setTargetOrganizationError] = useState<string | null>(null);
     const [moving, setMoving] = useState(false);
     const [moveSuccess, setMoveSuccess] = useState(false);
     const [moveError, setMoveError] = useState<string | null>(null);
 
     const handleMove = async () => {
+        setTargetOrganizationError(null)
+        if (targetOrgId === -1) {
+            setTargetOrganizationError("Please select a target organization.");
+            return;
+        }
         setMoving(true);
         setMoveError(null);
         try {
-            await onMove(Number(targetOrgId));
+            await onMove(targetOrgId);
             setMoveSuccess(true);
         } catch (err: any) {
             console.error("Error moving license:", err);
@@ -53,7 +58,8 @@ export default function MoveLicenseModal({
 
     // ✅ Only clears internal state and calls onClose when user clicks Close
     const handleClose = () => {
-        setTargetOrgId("");
+        setTargetOrganizationError(null)
+        setTargetOrgId(-1)
         setMoveError(null);
         setMoveSuccess(false);
         onClose();
@@ -99,23 +105,29 @@ export default function MoveLicenseModal({
                             disabled
                         />
 
-                        <FormControl fullWidth>
+                        <FormControl fullWidth error={!!targetOrganizationError}>
                             <InputLabel id="target-org-select-label">Target Organization</InputLabel>
                             <Select
+                                native={true}
+                                id={"move-license-select"}
                                 labelId="target-org-select-label"
                                 value={targetOrgId}
                                 label="Target Organization"
-                                onChange={(e) => setTargetOrgId(e.target.value)}
+                                onChange={(e) => setTargetOrgId(Number(e.target.value))}
                             >
+                                <option value={-1} disabled></option>
                                 {targetOrganizations?.map((org) => {
                                     if (org.id === sourceOrganization?.id) return null;
                                     return (
-                                        <MenuItem key={org.id} value={org.id}>
+                                        <option key={org.id} value={org.id}>
                                             {org.name}
-                                        </MenuItem>
+                                        </option>
                                     );
                                 })}
                             </Select>
+                            {targetOrganizationError &&
+                                <FormHelperText>{targetOrganizationError}</FormHelperText>
+                            }
                         </FormControl>
                     </>
                 )}
@@ -128,7 +140,8 @@ export default function MoveLicenseModal({
                     <Button
                         variant="contained"
                         onClick={handleMove}
-                        disabled={!targetOrgId}
+                        disabled={targetOrgId === -1}
+                        data-cy-test="confirm-move-license-button"
                     >
                         Move
                     </Button>

@@ -161,11 +161,9 @@ export default function OrganizationDetailPage() {
     };
 
     const renderRowActions = (row: any) => (
-        <>
-            <IconButton onClick={(e) => handleMenuClick(e, row.serial_Number, row.id)}>
+            <IconButton onClick={(e) => handleMenuClick(e, row.serial_Number, row.id)} data-testid={"actions-button"}>
                 <MoreVertIcon />
             </IconButton>
-        </>
     );
 
     const {data: dataOrgDetail, error: errorOrgDetail, loading: loadingOrgDetail} = useFetchApi(() => getOrganizationById(params.id))
