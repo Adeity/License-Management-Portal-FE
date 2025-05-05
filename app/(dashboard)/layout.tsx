@@ -32,7 +32,7 @@ export default function Layout(props: { children: React.ReactNode }) {
     }, []);
 
     return (
-      <DashboardLayout>
+      <DashboardLayout defaultSidebarCollapsed={true}>
               {loading ? (
                   <div style={{ display: 'flex', justifyContent: 'center', alignItems: '', height: '100vh' }}>
                       <CircularProgress  size={"5rem"}/>
