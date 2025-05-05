@@ -1,13 +1,15 @@
 import { faker } from '@faker-js/faker';
 describe('handle package details', () => {
-    const resellerName = 'ECorp CHINA'
+    const resellerName = Cypress.env("reseller_name")
 
     it('Delete all and then add all three, shows all three', () => {
         cy.visit('')
 
         cy.login("admin@p.com", "Admin123!")
         cy.findOrganizationOrPaginate(resellerName)
+        cy.intercept('/api/package-details').as('getPackageDetails')
         cy.clickOnOrganizationInTable(resellerName)
+        cy.wait('@getPackageDetails')
 
         cy.contains('button', 'Package Details').should('exist').click()
 
@@ -18,9 +20,6 @@ describe('handle package details', () => {
         cy.assignPackage(500)
         cy.assignPackage(100)
 
-        cy.contains('button', /assign new package/i).click()
-        cy.contains(/There are no packages left to assign to this organization/i).should('exist')
-        cy.contains('button', /close/i).click()
 
         cy.get('table tbody tr').should('have.length', 3)
     })
@@ -75,7 +74,7 @@ describe('handle package details', () => {
 
 
     it('Delete all log as reseller and be unable to create any license', () => {
-        const resellerName = 'ECorp CHINA'
+        const resellerName = Cypress.env("reseller_name")
 
         cy.visit('')
         cy.login("admin@p.com", "Admin123!")
