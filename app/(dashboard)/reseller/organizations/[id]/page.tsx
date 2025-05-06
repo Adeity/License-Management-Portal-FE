@@ -148,16 +148,16 @@ export default function OrganizationDetailPage() {
 
     const handleMoveLicense = async (targetOrgId: number) => {
         if (!selectedLicenseId || !dataOrgDetail?.id) return;
-        try {
-            await moveLicensePost({
-                SerialNumberDetailId: selectedLicenseId,
-                SourceOrganizationAccountId: dataOrgDetail.id,
-                TargetOrganizationAccountId: targetOrgId
-            });
-            refetchLicenses();
-        } catch (e) {
-            console.error("Failed to move license", e);
+        const res = await moveLicensePost({
+            SerialNumberDetailId: selectedLicenseId,
+            SourceOrganizationAccountId: dataOrgDetail.id,
+            TargetOrganizationAccountId: targetOrgId
+        });
+        if (res.status !== 200) {
+            return {error: "Failed to move license"};
         }
+        refetchLicenses();
+        return {result: "License moved successfully"};
     };
 
     const renderRowActions = (row: any) => (

@@ -67,7 +67,7 @@ declare global {
 
 import { OrganizationType } from "../../enums/OrganizationType"
 
-const resellerName = "ECorp CHINA"
+const resellerName = Cypress.env("reseller_name");
 
 Cypress.Commands.add('login', (email: string, password: string) => {
     cy.location('pathname').should('eq', '/login')
@@ -165,6 +165,7 @@ Cypress.Commands.add('clickOnOrganizationInTable', (name: string) => {
 })
 
 Cypress.Commands.add('deleteAllPackageDetails', () => {
+    cy.get('table').should('exist')
     cy.get('body').then(($body) => {
         if ($body.find('button[data-testid="actions-button"]').length) {
             // Button exists — perform the delete sequence
@@ -190,7 +191,10 @@ Cypress.Commands.add('assignToResellerPackageDetails', (quantity: number) => {
     cy.visit('')
     cy.loginAdmin()
     cy.findOrganizationOrPaginate(resellerName)
+
+    cy.intercept('/api/package-details').as('getPackageDetails')
     cy.clickOnOrganizationInTable(resellerName)
+    cy.wait('@getPackageDetails')
 
     cy.contains('button', 'Package Details').should('exist').click()
 

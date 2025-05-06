@@ -46,7 +46,7 @@ export default function MoveLicenseModal({
         setMoving(true);
         setMoveError(null);
         try {
-            await onMove(targetOrgId);
+            await onMove(Number(targetOrgId));
             setMoveSuccess(true);
         } catch (err: any) {
             console.error("Error moving license:", err);

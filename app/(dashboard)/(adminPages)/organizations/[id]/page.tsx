@@ -204,9 +204,9 @@ export default function HomePage() {
             return p.packageDetailsId
         })
 
-        const filteredPackageDetails = dataPackageDetails.filter((p) => {
+        const filteredPackageDetails = dataPackageDetails ? dataPackageDetails.filter((p) => {
             return !packageDataIds.includes(p.id)
-        });
+        }) : [];
 
         return (
             <Box mt={0}>
