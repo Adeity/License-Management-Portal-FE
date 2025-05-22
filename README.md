@@ -2,7 +2,7 @@
 
 This is a [Next.js](https://nextjs.org/) project for managing organizations, resellers, and license packages. The project uses Material UI for the UI, Cypress for end-to-end testing, and Jest for unit testing.
 
-The backend part can be founh [here](https://github.com/Adeity/dp-be-new)
+The backend part can be found [here](https://github.com/Adeity/License-Management-Portal-BE)
 
 ## Features
 
